@@ -9,8 +9,10 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 2, 6, 23;    /* slate-950 */
-  --background-end-rgb: 10, 15, 30;    /* slightly darker blue */
+  --background-start-rgb: 2, 6, 23;
+  /* slate-950 */
+  --background-end-rgb: 10, 15, 30;
+  /* slightly darker blue */
 }
 
 body {
@@ -52,13 +54,13 @@ body::before {
 @layer components {
   .mesh-gradient {
     background-color: #020617;
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(220,100%,10%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(225,100%,15%,1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(230,100%,10%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 50%, hsla(225,100%,12%,1) 0, transparent 50%), 
-      radial-gradient(at 0% 100%, hsla(220,100%,15%,1) 0, transparent 50%), 
-      radial-gradient(at 100% 100%, hsla(225,100%,10%,1) 0, transparent 50%);
+    background-image:
+      radial-gradient(at 0% 0%, hsla(220, 100%, 10%, 1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(225, 100%, 15%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(230, 100%, 10%, 1) 0, transparent 50%),
+      radial-gradient(at 50% 50%, hsla(225, 100%, 12%, 1) 0, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(220, 100%, 15%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(225, 100%, 10%, 1) 0, transparent 50%);
   }
 
   .glass-card {
@@ -86,13 +88,19 @@ body::before {
 }
 
 @keyframes scan {
-  0% { top: 0; }
-  100% { top: 100%; }
+  0% {
+    top: 0;
+  }
+
+  100% {
+    top: 100%;
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -102,13 +110,16 @@ body::before {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.1);
 }

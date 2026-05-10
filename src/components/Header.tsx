@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Settings, 
-  Globe, 
-  Moon, 
-  Sun, 
-  LogOut, 
-  Check, 
+import {
+  Settings,
+  Globe,
+  Moon,
+  Sun,
+  LogOut,
+  Check,
   ChevronDown,
   Bell,
   Stethoscope,
@@ -31,7 +31,7 @@ export const Header = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [activeSub, setActiveSub] = useState<'lang' | 'theme' | null>(null);
-  
+
   const handleLogout = () => {
     logout();
     router.push("/");
@@ -84,7 +84,7 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
-      <motion.div 
+      <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
@@ -159,7 +159,7 @@ export const Header = () => {
             <div className="flex items-center gap-3">
               {isDoctorPortal && (
                 <div className="relative">
-                  <button 
+                  <button
                     onClick={() => {
                       setShowNotifications(!showNotifications);
                       setShowSettings(false);
@@ -175,32 +175,32 @@ export const Header = () => {
 
                   <AnimatePresence>
                     {showNotifications && (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         className={cn("absolute top-full right-0 mt-3 w-72 z-[60] p-4 rounded-2xl border shadow-2xl", theme === 'dark' ? "bg-slate-900 border-white/10" : "bg-white border-slate-200")}
                       >
                         <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                           <h4 className={cn("text-[10px] font-black uppercase tracking-widest", theme === 'dark' ? "text-white" : "text-slate-900")}>{t.alerts}</h4>
-                           <span className="text-[8px] font-black text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-md">{t.new} 3</span>
+                          <h4 className={cn("text-[10px] font-black uppercase tracking-widest", theme === 'dark' ? "text-white" : "text-slate-900")}>{t.alerts}</h4>
+                          <span className="text-[8px] font-black text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-md">{t.new} 3</span>
                         </div>
-                        
+
                         <div className="space-y-3">
-                           {[
-                             { title: "High Risk Scan", msg: "Patient Uzair Ahmad uploaded a high-risk scan.", time: "2m ago", urgent: true },
-                             { title: "Meeting Reminder", msg: "Consultation with Sarah Khan in 15 mins.", time: "10m ago", urgent: false },
-                             { title: "System Update", msg: "AI Model v2.4 successfully deployed.", time: "1h ago", urgent: false }
-                           ].map((n, i) => (
-                             <div key={i} className="group cursor-pointer">
-                                <div className="flex justify-between items-start mb-1">
-                                  <p className={cn("text-[9px] font-black uppercase", n.urgent ? "text-red-500" : (theme === 'dark' ? "text-white" : "text-slate-900"))}>{n.title}</p>
-                                  <span className="text-[7px] font-bold text-slate-600">{n.time}</span>
-                                </div>
-                                <p className="text-[9px] text-slate-500 leading-relaxed group-hover:text-slate-300 transition-colors">{n.msg}</p>
-                                {i < 2 && <div className="h-px bg-white/5 mt-3" />}
-                             </div>
-                           ))}
+                          {[
+                            { title: "High Risk Scan", msg: "Patient Uzair Ahmad uploaded a high-risk scan.", time: "2m ago", urgent: true },
+                            { title: "Meeting Reminder", msg: "Consultation with Sarah Khan in 15 mins.", time: "10m ago", urgent: false },
+                            { title: "System Update", msg: "AI Model v2.4 successfully deployed.", time: "1h ago", urgent: false }
+                          ].map((n, i) => (
+                            <div key={i} className="group cursor-pointer">
+                              <div className="flex justify-between items-start mb-1">
+                                <p className={cn("text-[9px] font-black uppercase", n.urgent ? "text-red-500" : (theme === 'dark' ? "text-white" : "text-slate-900"))}>{n.title}</p>
+                                <span className="text-[7px] font-bold text-slate-600">{n.time}</span>
+                              </div>
+                              <p className="text-[9px] text-slate-500 leading-relaxed group-hover:text-slate-300 transition-colors">{n.msg}</p>
+                              {i < 2 && <div className="h-px bg-white/5 mt-3" />}
+                            </div>
+                          ))}
                         </div>
 
                         <button className="w-full mt-4 py-2 text-[8px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors">
@@ -211,9 +211,9 @@ export const Header = () => {
                   </AnimatePresence>
                 </div>
               )}
-              
+
               <div className="relative">
-                <button 
+                <button
                   onClick={() => {
                     setShowSettings(!showSettings);
                     setShowNotifications(false);
@@ -228,7 +228,7 @@ export const Header = () => {
 
                 <AnimatePresence>
                   {showSettings && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}

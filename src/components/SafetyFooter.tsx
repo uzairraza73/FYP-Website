@@ -8,7 +8,7 @@ export const SafetyFooter = () => {
   return (
     <footer className="w-full pt-20 pb-10 px-6 bg-slate-950 text-white overflow-hidden relative border-t border-white/5">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
-      
+
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
           {/* Brand Info */}
@@ -68,8 +68,8 @@ export const SafetyFooter = () => {
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Safety Protocol</span>
           </div>
           <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-            oncura is an educational monitoring tool. It is <span className="text-white font-bold">not a replacement</span> for professional medical advice. 
-            Always seek the advice of your physician with any questions regarding a medical condition. 
+            oncura is an educational monitoring tool. It is <span className="text-white font-bold">not a replacement</span> for professional medical advice.
+            Always seek the advice of your physician with any questions regarding a medical condition.
             Never disregard professional medical advice because of information on this website.
           </p>
         </div>
