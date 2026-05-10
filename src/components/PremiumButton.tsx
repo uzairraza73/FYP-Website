@@ -36,7 +36,7 @@ export const PremiumButton = ({
         variants[variant],
         className
       )}
-      {...props}
+      {...(props as any)}
     >
       {/* Animated Border Shade / Glow */}
       <motion.div
