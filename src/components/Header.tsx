@@ -27,7 +27,8 @@ export const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuthStore();
-  const { theme, language, setTheme, setLanguage } = useSettingsStore();
+  const { language, setLanguage } = useSettingsStore();
+  const theme = 'dark';
   const [showSettings, setShowSettings] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [activeSub, setActiveSub] = useState<'lang' | 'theme' | null>(null);
@@ -239,24 +240,6 @@ export const Header = () => {
                         <p className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">{user?.role} Portal</p>
                       </div>
 
-                      {/* Theme Toggle */}
-                      <div className="mb-1">
-                        <button onClick={() => setActiveSub(activeSub === 'theme' ? null : 'theme')} className="w-full flex items-center justify-between p-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-white/5 transition-colors">
-                          <div className="flex items-center gap-3">{theme === 'dark' ? <Moon size={14} /> : <Sun size={14} />} {t.themeMode}</div>
-                          <ChevronDown size={12} className={cn("transition-transform", activeSub === 'theme' && "rotate-180")} />
-                        </button>
-                        <AnimatePresence>
-                          {activeSub === 'theme' && (
-                            <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-white/5 rounded-lg">
-                              {(['dark', 'light'] as Theme[]).map(targetTheme => (
-                                <button key={targetTheme} onClick={() => setTheme(targetTheme)} className={cn("w-full px-4 py-2 text-[9px] font-bold uppercase text-left transition-colors", theme === targetTheme ? "text-blue-500" : "text-slate-500 hover:text-slate-300")}>
-                                  {targetTheme} {theme === targetTheme && <Check size={10} className="inline ml-1" />}
-                                </button>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
 
                       {/* Language Toggle */}
                       <div className="mb-1">
