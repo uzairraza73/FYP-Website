@@ -9,16 +9,15 @@ import { usePathname } from "next/navigation";
 export const SafetyFooter = () => {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/doctor')) {
-    return null;
-  }
+  const isDashboard = pathname.startsWith('/dashboard') || pathname.startsWith('/doctor');
 
   return (
     <footer className="w-full pt-20 pb-10 px-6 bg-slate-950 text-white overflow-hidden relative border-t border-white/5">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
 
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+        {!isDashboard && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
           {/* Brand Info */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center mb-6 group">
@@ -68,6 +67,7 @@ export const SafetyFooter = () => {
             </ul>
           </div>
         </div>
+        )}
 
         {/* Safety Disclaimer Box */}
         <div className="p-8 rounded-3xl bg-slate-900/10 border border-white/5 mb-12">
