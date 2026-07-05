@@ -17,7 +17,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: radial-gradient(circle at center, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.95) 100%), url('/1.jpg') no-repeat center center fixed;
+  background: radial-gradient(circle at center, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.95) 100%), url('/2.png') no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
   font-family: var(--font-inter);
@@ -28,14 +28,14 @@ body {
 
 .dark-theme {
   --foreground-rgb: 255, 255, 255;
-  background: radial-gradient(circle at center, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.95) 100%), url('/1.jpg') no-repeat center center fixed;
+  background: radial-gradient(circle at center, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.95) 100%), url('/2.png') no-repeat center center fixed;
   background-size: cover;
   color: white;
 }
 
 .light-theme {
   --foreground-rgb: 15, 23, 42;
-  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.75) 0%, rgba(226, 232, 240, 0.95) 100%), url('/1.jpg') no-repeat center center fixed;
+  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.75) 0%, rgba(226, 232, 240, 0.95) 100%), url('/2.png') no-repeat center center fixed;
   background-size: cover;
   color: #0f172a;
 }
