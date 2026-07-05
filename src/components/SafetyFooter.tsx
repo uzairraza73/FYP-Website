@@ -4,7 +4,15 @@ import { Activity, ShieldCheck, Mail, Phone, MapPin, ExternalLink, Globe } from 
 import Link from "next/link";
 import Image from "next/image";
 
+import { usePathname } from "next/navigation";
+
 export const SafetyFooter = () => {
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/doctor')) {
+    return null;
+  }
+
   return (
     <footer className="w-full pt-20 pb-10 px-6 bg-slate-950 text-white overflow-hidden relative border-t border-white/5">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
