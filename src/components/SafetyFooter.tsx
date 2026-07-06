@@ -22,11 +22,11 @@ export const SafetyFooter = () => {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center mb-6 group">
               <Image
-                src="/web-logo.png"
+                src="/website-logo.png"
                 alt="Oncura Logo"
-                width={110}
-                height={32}
-                className="object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-all duration-300"
+                width={120}
+                height={36}
+                className="object-contain mix-blend-screen opacity-90 group-hover:opacity-100 transition-all duration-300"
               />
             </Link>
             <p className="text-[10px] text-slate-500 font-medium leading-relaxed mb-6 uppercase tracking-wider">

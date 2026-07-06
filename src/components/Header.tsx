@@ -99,21 +99,21 @@ export const Header = () => {
           {isDoctorPortal ? (
             <div className="flex items-center gap-3">
               <Image
-                src="/web-logo.png"
+                src="/website-logo.png"
                 alt="Oncura Logo"
-                width={120}
-                height={36}
-                className="object-contain mix-blend-screen opacity-90 hover:opacity-100 transition-all duration-300"
+                width={130}
+                height={40}
+                className="object-contain mix-blend-screen opacity-95 hover:opacity-100 transition-all duration-300"
               />
             </div>
           ) : (
             <Link href="/" className="flex items-center group gap-2">
               <Image
-                src="/web-logo.png"
+                src="/website-logo.png"
                 alt="Oncura Logo"
-                width={120}
-                height={36}
-                className="object-contain mix-blend-screen opacity-90 group-hover:opacity-100 transition-all duration-300"
+                width={130}
+                height={40}
+                className="object-contain mix-blend-screen opacity-95 group-hover:opacity-100 transition-all duration-300"
               />
             </Link>
           )}
