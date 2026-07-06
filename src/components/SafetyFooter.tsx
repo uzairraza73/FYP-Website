@@ -21,9 +21,13 @@ export const SafetyFooter = () => {
           {/* Brand Info */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center mb-6 group">
-              <span className="text-2xl font-black tracking-tighter text-white hover:text-blue-500 transition-colors">
-                Oncura
-              </span>
+              <Image
+                src="/web-logo.png"
+                alt="Oncura Logo"
+                width={110}
+                height={32}
+                className="object-contain mix-blend-luminosity brightness-150 opacity-80 group-hover:opacity-100 group-hover:brightness-200 transition-all duration-300"
+              />
             </Link>
             <p className="text-[10px] text-slate-500 font-medium leading-relaxed mb-6 uppercase tracking-wider">
               Pioneering artificial intelligence and clinical dermatology to provide accessible skin health monitoring for everyone.

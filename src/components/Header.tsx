@@ -98,15 +98,23 @@ export const Header = () => {
         <div className="flex-1 flex items-center gap-4">
           {isDoctorPortal ? (
             <div className="flex items-center gap-3">
-              <span className={cn("text-xl font-black tracking-tighter uppercase font-plus-jakarta", theme === 'dark' ? "text-white" : "text-slate-900")}>
-                Oncura <span className="text-blue-500">Doctor</span>
-              </span>
+              <Image
+                src="/web-logo.png"
+                alt="Oncura Logo"
+                width={120}
+                height={36}
+                className="object-contain mix-blend-luminosity brightness-150 opacity-90 hover:opacity-100 transition-all duration-300"
+              />
             </div>
           ) : (
             <Link href="/" className="flex items-center group gap-2">
-              <span className={cn("text-2xl font-black tracking-tighter transition-colors group-hover:text-blue-500", theme === 'dark' ? "text-white" : "text-slate-900")}>
-                Oncura
-              </span>
+              <Image
+                src="/web-logo.png"
+                alt="Oncura Logo"
+                width={120}
+                height={36}
+                className="object-contain mix-blend-luminosity brightness-150 opacity-90 group-hover:opacity-100 group-hover:brightness-200 transition-all duration-300"
+              />
             </Link>
           )}
         </div>
