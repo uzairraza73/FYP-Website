@@ -103,7 +103,7 @@ export const Header = () => {
                 alt="Oncura Logo"
                 width={120}
                 height={36}
-                className="object-contain mix-blend-luminosity brightness-150 opacity-90 hover:opacity-100 transition-all duration-300"
+                className="object-contain mix-blend-screen opacity-90 hover:opacity-100 transition-all duration-300"
               />
             </div>
           ) : (
@@ -113,7 +113,7 @@ export const Header = () => {
                 alt="Oncura Logo"
                 width={120}
                 height={36}
-                className="object-contain mix-blend-luminosity brightness-150 opacity-90 group-hover:opacity-100 group-hover:brightness-200 transition-all duration-300"
+                className="object-contain mix-blend-screen opacity-90 group-hover:opacity-100 transition-all duration-300"
               />
             </Link>
           )}

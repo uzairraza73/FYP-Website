@@ -26,7 +26,7 @@ export const SafetyFooter = () => {
                 alt="Oncura Logo"
                 width={110}
                 height={32}
-                className="object-contain mix-blend-luminosity brightness-150 opacity-80 group-hover:opacity-100 group-hover:brightness-200 transition-all duration-300"
+                className="object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-all duration-300"
               />
             </Link>
             <p className="text-[10px] text-slate-500 font-medium leading-relaxed mb-6 uppercase tracking-wider">
