@@ -8,17 +8,15 @@
 }
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 2, 6, 23;
-  /* slate-950 */
-  --background-end-rgb: 10, 15, 30;
-  /* slightly darker blue */
+  --foreground-rgb: 26, 26, 26;
+  --background-start-rgb: 255, 245, 240;
+  --background-end-rgb: 255, 216, 194;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: radial-gradient(circle at center, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.95) 100%), url('/1.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(135deg, #FFF9F5 0%, #FFF0E5 50%, #FFE5D6 100%);
+  background-attachment: fixed;
   min-height: 100vh;
   font-family: var(--font-inter);
   font-size: 14px;
@@ -27,17 +25,17 @@ body {
 }
 
 .dark-theme {
-  --foreground-rgb: 255, 255, 255;
-  background: radial-gradient(circle at center, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.95) 100%), url('/1.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: white;
+  --foreground-rgb: 26, 26, 26;
+  background: linear-gradient(135deg, #FFF9F5 0%, #FFF0E5 50%, #FFE5D6 100%);
+  background-attachment: fixed;
+  color: #1A1A1A;
 }
 
 .light-theme {
-  --foreground-rgb: 15, 23, 42;
-  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.75) 0%, rgba(226, 232, 240, 0.95) 100%), url('/1.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #0f172a;
+  --foreground-rgb: 26, 26, 26;
+  background: linear-gradient(135deg, #FFF9F5 0%, #FFF0E5 50%, #FFE5D6 100%);
+  background-attachment: fixed;
+  color: #1A1A1A;
 }
 
 /* Premium Noise Overlay */

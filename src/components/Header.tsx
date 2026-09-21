@@ -19,6 +19,7 @@ import { PremiumButton } from "./PremiumButton";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 import Image from "next/image";
+import logoImg from "../../pic folder/logo.png";
 
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSettingsStore, Theme, Language } from "@/store/useSettingsStore";
@@ -90,30 +91,29 @@ export const Header = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
         className={cn(
-          "max-w-7xl mx-auto flex items-center justify-between px-8 py-3 shadow-sm relative transition-colors duration-500 rounded-2xl",
-          "bg-gradient-to-r from-[#FFF5F0]/90 via-[#FFEBE0]/90 to-[#FFD8C2]/90 backdrop-blur-md border border-white/50"
+          "max-w-7xl mx-auto flex items-center justify-between px-8 py-3 relative transition-colors duration-500 rounded-[2rem]",
+          "bg-gradient-to-r from-[#FFEBE0]/95 via-[#FFD8C2]/80 to-[#FFF5F0]/95 backdrop-blur-lg border-[1.5px] border-[#FFD8C2] shadow-[0_8px_30px_rgba(231,111,81,0.1)]"
         )}
       >
-        {/* Left Side: Logo / Brand */}
         <div className="flex-1 flex items-center gap-4">
           {isDoctorPortal ? (
             <div className="flex items-center gap-3">
               <Image
-                src="/website-logo.png"
+                src={logoImg}
                 alt="Oncura Logo"
                 width={130}
                 height={40}
-                className="object-contain mix-blend-screen opacity-95 hover:opacity-100 transition-all duration-300"
+                className="object-contain opacity-95 hover:opacity-100 transition-all duration-300"
               />
             </div>
           ) : (
             <Link href="/" className="flex items-center group gap-2">
               <Image
-                src="/website-logo.png"
+                src={logoImg}
                 alt="Oncura Logo"
                 width={130}
                 height={40}
-                className="object-contain mix-blend-screen opacity-95 group-hover:opacity-100 transition-all duration-300"
+                className="object-contain opacity-95 group-hover:opacity-100 transition-all duration-300"
               />
             </Link>
           )}

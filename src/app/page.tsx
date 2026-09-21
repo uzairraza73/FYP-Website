@@ -66,7 +66,7 @@ export default function Home() {
   return (
     <div className="pt-24 pb-32">
       {/* Hero Section */}
-      <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#FFF5F0] via-[#FFEBE0] to-[#FFD8C2] rounded-[2rem] mx-auto max-w-[1400px] mt-4 shadow-2xl font-plus-jakarta border border-[#FFEBE0]">
+      <section className="relative w-full overflow-hidden bg-transparent mx-auto max-w-[1400px] font-plus-jakarta">
         {/* Background decorations (Subtle curves/waves) */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
           <svg width="100%" height="100%" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute w-full h-full object-cover opacity-30">
@@ -149,12 +149,12 @@ export default function Home() {
       </section>
 
       {/* Clinical Workflow (How It Works) */}
-      <section className="py-24 bg-slate-950/20 border-y border-white/5 mt-12">
+      <section className="py-24 bg-white/40 border-y border-[#FFEBE0] mt-12 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6">
           <Reveal>
             <div className="text-center mb-16">
-              <h2 className="text-2xl font-black text-white mb-2 font-plus-jakarta">How It Works</h2>
-              <p className="text-xs text-slate-500 uppercase tracking-widest">A three-step clinical pipeline</p>
+              <h2 className="text-3xl font-black text-[#111827] mb-2 font-plus-jakarta">How It Works</h2>
+              <p className="text-sm text-slate-500 uppercase tracking-widest font-bold">A three-step clinical pipeline</p>
             </div>
           </Reveal>
 
@@ -166,12 +166,12 @@ export default function Home() {
             ].map((step, idx) => (
               <Reveal key={idx} delay={idx * 0.1}>
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-blue-500 mb-6 border border-white/5 relative">
-                    <div className="absolute inset-0 rounded-full bg-blue-500/5 animate-ping opacity-20" />
-                    <step.icon size={24} />
+                  <div className="w-20 h-20 rounded-[1.5rem] bg-[#FFEBE0] flex items-center justify-center text-[#E76F51] mb-6 border border-[#FFD8C2] shadow-sm relative">
+                    <div className="absolute inset-0 rounded-[1.5rem] bg-[#E76F51]/10 animate-ping opacity-30" />
+                    <step.icon size={28} />
                   </div>
-                  <h3 className="text-sm font-bold text-white mb-2">{step.title}</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed max-w-[200px]">{step.desc}</p>
+                  <h3 className="text-lg font-black text-[#1A1A1A] mb-3">{step.title}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed max-w-[200px] font-medium">{step.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -180,55 +180,55 @@ export default function Home() {
       </section>
 
       {/* Final CTA Box */}
-      <section className="px-6 py-12 max-w-4xl mx-auto">
+      <section className="px-6 py-20 max-w-5xl mx-auto">
         <Reveal delay={0.2}>
-          <div className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-blue-600/20 via-blue-500/10 to-transparent border border-white/10 overflow-hidden group">
-            <GlassCard className="bg-[#050A1A] text-white text-center py-20 px-8 border-none overflow-hidden relative shadow-3xl rounded-[2.2rem]">
+          <div className="relative p-1 rounded-[3rem] bg-gradient-to-br from-[#FFEBE0] via-[#FFF5F0] to-transparent border border-[#FFD8C2] overflow-hidden group shadow-2xl">
+            <GlassCard className="bg-white/80 text-[#1A1A1A] text-center py-24 px-10 border-none overflow-hidden relative shadow-inner rounded-[2.8rem]">
               {/* Animated Background Elements */}
               <motion.div
                 animate={{
                   scale: [1, 1.2, 1],
-                  opacity: [0.1, 0.2, 0.1],
+                  opacity: [0.3, 0.5, 0.3],
                   x: [0, 20, 0]
                 }}
                 transition={{ duration: 8, repeat: Infinity }}
-                className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600 rounded-full blur-[100px] pointer-events-none"
+                className="absolute -top-24 -right-24 w-[500px] h-[500px] bg-[#FFD8C2]/60 rounded-full blur-[100px] pointer-events-none"
               />
               <motion.div
                 animate={{
                   scale: [1.2, 1, 1.2],
-                  opacity: [0.05, 0.15, 0.05],
+                  opacity: [0.2, 0.4, 0.2],
                   x: [0, -20, 0]
                 }}
                 transition={{ duration: 10, repeat: Infinity }}
-                className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-400 rounded-full blur-[100px] pointer-events-none"
+                className="absolute -bottom-24 -left-24 w-[500px] h-[500px] bg-[#FFEBE0]/80 rounded-full blur-[100px] pointer-events-none"
               />
 
               <div className="relative z-10">
                 <motion.h2
                   whileInView={{ scale: [0.95, 1] }}
                   transition={{ duration: 1 }}
-                  className="text-3xl md:text-5xl font-black mb-8 font-plus-jakarta leading-tight tracking-tight"
+                  className="text-4xl md:text-6xl font-black mb-10 font-plus-jakarta leading-tight tracking-tight text-[#111827]"
                 >
                   Elevate your skin <br />
-                  <span className="text-blue-500 italic">health standard.</span>
+                  <span className="text-[#E76F51] italic">health standard.</span>
                 </motion.h2>
 
                 <Link href="/scan">
-                  <PremiumButton variant="secondary" className="px-12 py-3.5 text-[10px] bg-[#0F172A]/90 border-blue-400/40 text-white hover:bg-slate-800 hover:border-blue-400/60 shadow-[0_0_20px_rgba(37,99,235,0.15)]">
-                    Start Clinical Scan <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" size={12} />
-                  </PremiumButton>
+                  <button className="px-12 py-4 text-base font-bold bg-[#5C4033] border-none text-white rounded-[1.25rem] hover:bg-[#3E2723] shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center justify-center mx-auto">
+                    Start Clinical Scan <ArrowRight className="inline-block ml-3 group-hover:translate-x-1 transition-transform" size={18} />
+                  </button>
                 </Link>
 
-                <div className="mt-12 flex flex-wrap items-center justify-center gap-6 opacity-40">
+                <div className="mt-14 flex flex-wrap items-center justify-center gap-8 opacity-60">
                   {[
                     { icon: ShieldCheck, text: "HIPAA COMPLIANT" },
                     { icon: Lock, text: "SSL ENCRYPTED" },
                     { icon: CheckCircle2, text: "CLINICAL GRADE" }
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <item.icon size={12} className="text-blue-400" />
-                      <span className="text-[8px] font-black uppercase tracking-[0.2em]">{item.text}</span>
+                      <item.icon size={16} className="text-[#E76F51]" />
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-[#4A4A4A]">{item.text}</span>
                     </div>
                   ))}
                 </div>
@@ -239,14 +239,14 @@ export default function Home() {
       </section>
 
       {/* Trust Stats */}
-      <section className="py-20 border-y border-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-blue-600/5 blur-[120px] -z-10" />
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="py-24 border-y border-[#FFEBE0] relative overflow-hidden bg-white/30 backdrop-blur-md">
+        <div className="absolute inset-0 bg-[#FFD8C2]/10 blur-[120px] -z-10" />
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12">
           {stats.map((stat, idx) => (
             <Reveal key={idx} delay={idx * 0.1}>
               <div className="text-center">
-                <p className="text-3xl md:text-4xl font-black text-blue-500 mb-1 font-plus-jakarta">{stat.value}</p>
-                <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-500">{stat.label}</p>
+                <p className="text-4xl md:text-5xl font-black text-[#E76F51] mb-2 font-plus-jakarta">{stat.value}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">{stat.label}</p>
               </div>
             </Reveal>
           ))}
@@ -256,27 +256,27 @@ export default function Home() {
       {/* Features Grid */}
       <section className="px-6 py-24 max-w-7xl mx-auto">
         <Reveal>
-          <div className="mb-16">
-            <h2 className="text-3xl font-black text-white font-plus-jakarta tracking-tight">Engineered for Accuracy.</h2>
+          <div className="mb-16 text-center">
+            <h2 className="text-4xl font-black text-[#111827] font-plus-jakarta tracking-tight">Engineered for Accuracy.</h2>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[280px]">
           {features.map((feature, idx) => (
             <Reveal key={idx} delay={idx * 0.1}>
               <GlassCard
                 className={cn(
-                  "relative overflow-hidden group flex flex-col justify-end p-6 border-white/5 bg-slate-900/10 h-full",
+                  "relative overflow-hidden group flex flex-col justify-end p-8 border-[#FFD8C2] bg-white/60 shadow-lg hover:shadow-xl hover:bg-white/90 h-full",
                   feature.className
                 )}
               >
-                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-5 transition-opacity group-hover:opacity-15", feature.gradient)} />
+                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.03] transition-opacity group-hover:opacity-[0.08]", feature.gradient)} />
                 <div className="relative z-10">
-                  <div className="mb-4 w-10 h-10 rounded-xl bg-slate-900/50 backdrop-blur-xl border border-white/5 flex items-center justify-center text-blue-400 transition-transform group-hover:scale-110">
-                    <feature.icon size={20} />
+                  <div className="mb-6 w-14 h-14 rounded-2xl bg-[#FFF5F0] border border-[#FFD8C2] flex items-center justify-center text-[#E76F51] transition-transform group-hover:scale-110 shadow-sm">
+                    <feature.icon size={28} />
                   </div>
-                  <h3 className="text-base font-black text-white mb-2">{feature.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-xl font-black text-[#111827] mb-3">{feature.title}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed font-medium">{feature.desc}</p>
                 </div>
               </GlassCard>
             </Reveal>
@@ -288,17 +288,17 @@ export default function Home() {
       <section className="px-6 py-24 max-w-3xl mx-auto">
         <Reveal>
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-black text-white mb-8 font-plus-jakarta text-center">Protocol FAQ</h2>
-            <div className="space-y-3 text-left">
+            <h2 className="text-3xl font-black text-[#111827] mb-10 font-plus-jakarta text-center">Protocol FAQ</h2>
+            <div className="space-y-4 text-left">
               {[
                 "Is the AI scan a medical diagnosis?",
                 "How is my data protected?",
                 "What skin types are supported?",
                 "Can I share my results with a doctor?"
               ].map((q, i) => (
-                <GlassCard key={i} className="p-4 flex items-center justify-between group cursor-pointer hover:border-blue-500/20 bg-slate-900/10">
-                  <span className="text-xs font-bold text-slate-400 group-hover:text-white transition-colors">{q}</span>
-                  <ChevronDown className="text-slate-700 group-hover:text-blue-400 transition-colors" size={16} />
+                <GlassCard key={i} className="p-6 flex items-center justify-between group cursor-pointer hover:border-[#E76F51]/30 bg-white/60 border-transparent shadow-sm hover:shadow-md hover:bg-white/90">
+                  <span className="text-sm font-bold text-slate-600 group-hover:text-[#1A1A1A] transition-colors">{q}</span>
+                  <ChevronDown className="text-slate-400 group-hover:text-[#E76F51] transition-colors" size={20} />
                 </GlassCard>
               ))}
             </div>
