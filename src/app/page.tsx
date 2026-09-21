@@ -6,11 +6,12 @@ import { PremiumButton } from "@/components/PremiumButton";
 import {
   ShieldCheck, Zap, Activity, Clock, ArrowRight,
   Stethoscope, Microscope, Globe, Lock,
-  ChevronDown, CheckCircle2
+  ChevronDown, CheckCircle2, Cpu, HeartPulse
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
+import heroImage from "../../pic folder/hero session.png";
 
 const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.div
@@ -65,65 +66,90 @@ export default function Home() {
   return (
     <div className="pt-24 pb-32">
       {/* Hero Section */}
-      <section className="px-6 py-12 max-w-7xl mx-auto flex flex-col items-center text-center relative overflow-visible">
-        <div className="flex flex-col items-center max-w-3xl z-10">
-          <motion.h1
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6 font-plus-jakarta leading-tight"
-          >
-            Clinical AI <br />
-            For Your <span className="text-blue-500">Skin Health.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 1 }}
-            className="text-sm text-slate-400 max-w-2xl mb-10 leading-relaxed font-medium"
-          >
-            oncura bridges the gap between AI innovation and dermatological care.
-            Upload, scan, and understand your skin health with the world&apos;s most immersive platform.
-          </motion.p>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mb-20"
-          >
-            <Link href="/scan">
-              <PremiumButton glow className="px-8 py-2.5">
-                Launch AI Scanner
-              </PremiumButton>
-            </Link>
-            <PremiumButton variant="secondary" className="px-8 py-2.5">
-              Explore Clinical Data
-            </PremiumButton>
-          </motion.div>
+      <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#FFF5F0] via-[#FFEBE0] to-[#FFD8C2] rounded-[2rem] mx-auto max-w-[1400px] mt-4 shadow-2xl font-plus-jakarta border border-[#FFEBE0]">
+        {/* Background decorations (Subtle curves/waves) */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+          <svg width="100%" height="100%" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute w-full h-full object-cover opacity-30">
+            <path d="M-100 800 C 400 900, 800 500, 1500 1000 L 1500 1200 L -100 1200 Z" fill="url(#paint0_linear)" />
+            <path d="M-100 900 C 600 700, 1000 800, 1500 600 L 1500 1200 L -100 1200 Z" fill="url(#paint1_linear)" />
+            <defs>
+              <linearGradient id="paint0_linear" x1="0" y1="0" x2="1500" y2="0" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#FFD8C2" />
+                <stop offset="1" stopColor="#FFEBE0" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="paint1_linear" x1="0" y1="0" x2="1500" y2="0" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#FFF5F0" />
+                <stop offset="1" stopColor="#FFD8C2" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
 
-        {/* Character Container - Floating on the Right */}
-        <motion.div
-          initial={{ x: 50, opacity: 0, scale: 0.9 }}
-          whileInView={{ x: 0, opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-64 md:w-80 aspect-square hidden lg:block pointer-events-none"
-        >
-          <div className="absolute inset-0 bg-blue-600/5 blur-[100px] rounded-full" />
-          <Image
-            src="/hero_session.png"
-            alt="Clinical Assistant"
-            width={500}
-            height={500}
-            className="relative z-10 w-full h-full object-contain mix-blend-screen opacity-60"
-          />
-        </motion.div>
+        <div className="px-8 md:px-16 py-16 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+          <div className="flex flex-col items-start text-left max-w-xl">
+            <motion.h1
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="text-5xl md:text-6xl lg:text-[72px] font-black tracking-tight text-[#111827] mb-6 leading-[1.05]"
+            >
+              Early Detection <br />
+              for Healthier <br />
+              <span className="text-[#E76F51]">Tomorrows</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-sm md:text-base text-[#4A4A4A] mb-10 leading-relaxed font-medium pr-4"
+            >
+              Our AI-powered skin cancer detector helps you identify suspicious skin changes early, giving you peace of mind and a better chance of effective treatment - because your skin health matters.
+            </motion.p>
+
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+            >
+              <Link href="/scan" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto px-8 py-3.5 bg-[#5C4033] text-white rounded-xl font-bold text-base hover:bg-[#3E2723] transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform flex items-center justify-center gap-2">
+                  Get Started <ArrowRight size={18} />
+                </button>
+              </Link>
+              <Link href="/learn-more" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto px-8 py-3.5 bg-transparent text-[#5C4033] border-2 border-[#5C4033] rounded-xl font-bold text-base hover:bg-[#5C4033]/10 transition-colors text-center shadow-sm hover:shadow-md hover:-translate-y-1 transform">
+                  Learn More
+                </button>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right Content - Main Illustration */}
+          <motion.div
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+            className="relative w-full h-[600px] hidden lg:flex items-center justify-center"
+          >
+            {/* Main Image placeholder */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              {/* The laser scanner device scanning skin, labels are baked into the image */}
+              <Image
+                src={heroImage}
+                alt="Skin Scanner Device"
+                fill
+                className="relative z-10 object-contain scale-[1.1]"
+                priority
+              />
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Clinical Workflow (How It Works) */}
-      <section className="py-24 bg-slate-950/20 border-y border-white/5">
+      <section className="py-24 bg-slate-950/20 border-y border-white/5 mt-12">
         <div className="max-w-7xl mx-auto px-6">
           <Reveal>
             <div className="text-center mb-16">
@@ -153,7 +179,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA Box (Moved Here) */}
+      {/* Final CTA Box */}
       <section className="px-6 py-12 max-w-4xl mx-auto">
         <Reveal delay={0.2}>
           <div className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-blue-600/20 via-blue-500/10 to-transparent border border-white/10 overflow-hidden group">
@@ -258,10 +284,7 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* FAQ / Final CTA */}
-
-      {/* FAQ Section Only */}
+      {/* FAQ Section */}
       <section className="px-6 py-24 max-w-3xl mx-auto">
         <Reveal>
           <div className="text-center mb-12">

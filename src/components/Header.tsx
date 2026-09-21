@@ -90,8 +90,8 @@ export const Header = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
         className={cn(
-          "max-w-7xl mx-auto glass-card flex items-center justify-between px-6 py-2 border-white/5 shadow-2xl relative transition-colors duration-500",
-          theme === 'dark' ? "bg-slate-950/40" : "bg-white/80 backdrop-blur-xl"
+          "max-w-7xl mx-auto flex items-center justify-between px-8 py-3 shadow-sm relative transition-colors duration-500 rounded-2xl",
+          "bg-gradient-to-r from-[#FFF5F0]/90 via-[#FFEBE0]/90 to-[#FFD8C2]/90 backdrop-blur-md border border-white/50"
         )}
       >
         {/* Left Side: Logo / Brand */}
@@ -124,31 +124,22 @@ export const Header = () => {
           {isAuthenticated ? (
             isDoctorPortal ? (
               <>
-                <Link href="/doctor" className="text-[10px] font-black uppercase tracking-widest text-blue-500">{t.patientDir}</Link>
-                <Link href="/doctor/schedule" className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", theme === 'dark' ? "text-slate-500 hover:text-white" : "text-slate-400 hover:text-slate-900")}>{t.meetingSched}</Link>
+                <Link href="/doctor" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.patientDir}</Link>
+                <Link href="/doctor/schedule" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.meetingSched}</Link>
               </>
             ) : (
               <>
-                <Link href="/dashboard" className={cn(
-                  "text-[10px] font-black uppercase tracking-widest transition-colors",
-                  pathname === '/dashboard' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500")
-                )}>{t.dashboard}</Link>
-                <Link href="/chat" className={cn(
-                  "text-[10px] font-black uppercase tracking-widest transition-colors",
-                  pathname === '/chat' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500")
-                )}>CareBot</Link>
-                <Link href="/history" className={cn(
-                  "text-[10px] font-black uppercase tracking-widest transition-colors",
-                  pathname === '/history' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500")
-                )}>{t.history}</Link>
+                <Link href="/dashboard" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.dashboard}</Link>
+                <Link href="/chat" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">CareBot</Link>
+                <Link href="/history" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.history}</Link>
               </>
             )
           ) : (
             <>
-              <Link href="/" className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", pathname === '/' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500"))}>{t.home}</Link>
-              <Link href="/scan" className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", pathname === '/scan' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500"))}>{t.clinicalAi}</Link>
-              <Link href="/chat" className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", pathname === '/chat' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500"))}>CareBot</Link>
-              <Link href="/consult" className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", pathname === '/consult' ? "text-blue-400" : (theme === 'dark' ? "text-slate-500 hover:text-blue-400" : "text-slate-400 hover:text-blue-500"))}>{t.consult}</Link>
+              <Link href="/" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.home}</Link>
+              <Link href="/scan" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.clinicalAi}</Link>
+              <Link href="/chat" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">CareBot</Link>
+              <Link href="/consult" className="text-[12px] font-bold uppercase tracking-widest text-[#4A4A4A] hover:text-[#111827]">{t.consult}</Link>
             </>
           )}
         </nav>
@@ -157,13 +148,16 @@ export const Header = () => {
         <div className="flex-1 flex items-center justify-end gap-4">
           {!isAuthenticated ? (
             <>
-              <Link href="/auth/role-selection?mode=login" className={cn("hidden sm:flex items-center gap-2 transition-colors", theme === 'dark' ? "text-slate-500 hover:text-white" : "text-slate-400 hover:text-slate-900")}>
-                <span className="text-[10px] font-black uppercase tracking-widest">{t.signIn}</span>
+              <Link href="/auth/role-selection?mode=login" className="hidden sm:flex items-center gap-2 transition-colors text-[#4A4A4A] hover:text-[#111827]">
+                <span className="text-[12px] font-bold uppercase tracking-widest">{t.signIn}</span>
               </Link>
               <Link href="/auth/role-selection?mode=signup">
-                <PremiumButton className="px-4 py-1.5 text-[9px]">{t.join}</PremiumButton>
+                <button className="px-6 py-2 text-[14px] font-medium tracking-wide bg-transparent border-[1.5px] border-[#E76F51] text-[#E76F51] rounded-[1rem] hover:bg-[#E76F51]/10 transition-colors">
+                  Sign Up
+                </button>
               </Link>
             </>
+
           ) : (
             <div className="flex items-center gap-3">
               {isDoctorPortal && (
