@@ -8,6 +8,7 @@ import { useScanStore } from "@/store/useScanStore";
 import { generateMockResult } from "@/utils/mockData";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ScanPage() {
   const [image, setImage] = useState<string | null>(null);
@@ -135,8 +136,8 @@ export default function ScanPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               className={cn(
-                "relative h-[420px] flex flex-col items-center justify-center border-2 border-dashed transition-all duration-500 overflow-hidden rounded-[2.5rem] bg-white shadow-[0_20px_60px_rgba(92,64,51,0.05)]",
-                image ? "border-[#FFD8C2] bg-white" : "border-[#FFD8C2]/80 hover:border-[#E76F51]/40 hover:bg-[#FFF5F0]/50"
+                "relative h-[420px] flex flex-col items-center justify-center border border-dashed transition-all duration-500 overflow-hidden rounded-[2.5rem] shadow-[0_30px_80px_rgba(92,64,51,0.12)]",
+                image ? "border-[#FFD8C2]/60 bg-white" : "border-white/50 hover:border-[#E76F51]/30"
               )}
               onClick={() => !image && fileInputRef.current?.click()}
             >
@@ -155,14 +156,35 @@ export default function ScanPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex flex-col items-center gap-4 cursor-pointer p-8"
+                    className="relative w-full h-full flex flex-col items-center justify-center cursor-pointer group"
                   >
-                    <div className="w-20 h-20 rounded-full bg-[#FFF5F0] flex items-center justify-center text-[#E76F51] shadow-inner">
-                      <Upload size={32} />
+                    {/* Deep Glassmorphism Background */}
+                    <div className="absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
+                      <Image 
+                        src="/image-box-pic.jpg" 
+                        alt="Scan Box Background" 
+                        fill 
+                        className="object-cover opacity-20 saturate-150 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-25"
+                      />
+                      {/* Multi-layer frosted glass */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/75 via-[#FFF5F0]/65 to-[#FFD8C2]/40 backdrop-blur-[18px]" />
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.6)_0%,transparent_70%)]" />
+                      {/* Glass edge shimmer */}
+                      <div className="absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/60" />
                     </div>
-                    <div className="text-center">
-                      <p className="text-sm font-black text-[#3E2723] uppercase tracking-widest mb-2">Select Image</p>
-                      <p className="text-xs text-slate-500 font-medium">Click to browse or drag and drop<br/>JPG, PNG (Max 5MB)</p>
+
+                    <div className="relative z-10 flex flex-col items-center gap-5">
+                      {/* Glowing upload icon */}
+                      <div className="relative">
+                        <div className="absolute inset-0 rounded-full bg-[#E76F51]/20 blur-xl scale-150 animate-pulse" />
+                        <div className="relative w-24 h-24 rounded-full bg-white/70 backdrop-blur-xl flex items-center justify-center text-[#E76F51] shadow-[0_15px_40px_rgba(231,111,81,0.25),inset_0_1px_0_rgba(255,255,255,0.8)] border border-white/80 group-hover:scale-110 group-hover:shadow-[0_20px_50px_rgba(231,111,81,0.4)] transition-all duration-500">
+                          <Upload size={34} strokeWidth={1.8} />
+                        </div>
+                      </div>
+                      <div className="text-center bg-white/50 backdrop-blur-xl py-4 px-8 rounded-2xl border border-white/60 shadow-[0_8px_32px_rgba(92,64,51,0.08),inset_0_1px_0_rgba(255,255,255,0.9)]">
+                        <p className="text-sm font-black text-[#3E2723] uppercase tracking-widest mb-1.5">Upload Skin Image</p>
+                        <p className="text-xs text-[#5C4033]/80 font-semibold">Click to browse or drag & drop<br/><span className="font-medium text-slate-400">JPG, PNG · Max 5MB</span></p>
+                      </div>
                     </div>
                   </motion.div>
                 ) : (

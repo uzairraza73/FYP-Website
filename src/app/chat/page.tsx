@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { 
   Send, 
   Bot, 
@@ -303,40 +304,66 @@ export default function ChatPage() {
           </div>
         </motion.div>
 
-        {/* Floating AI Helper Info */}
+        {/* Floating AI Helper Info - Glassmorphism */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           {/* Clinical Guidance Card */}
            <motion.div 
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, type: "spring", stiffness: 300, damping: 25 }}
-              whileHover={{ y: -5, scale: 1.02 }}
-              className="p-4 rounded-[1.25rem] flex items-center gap-4 bg-white/80 backdrop-blur-md border border-[#FFD8C2]/80 shadow-sm hover:shadow-[0_15px_30px_rgba(231,111,81,0.1)] hover:border-[#E76F51]/40 transition-all cursor-pointer group"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="relative rounded-[1.5rem] overflow-hidden cursor-pointer group h-[96px]"
            >
-              <div className="w-12 h-12 rounded-xl bg-[#FFF5F0] flex items-center justify-center text-[#E76F51] shrink-0 border border-[#FFD8C2]/40 group-hover:bg-gradient-to-br group-hover:from-[#E76F51] group-hover:to-[#D4603F] group-hover:text-white transition-all duration-500">
-                <Stethoscope size={22} className="group-hover:scale-110 transition-transform" />
+              {/* Background image */}
+              <div className="absolute inset-0">
+                <Image src="/scan-box-image.png" alt="" fill className="object-cover opacity-25 saturate-150 group-hover:scale-110 group-hover:opacity-30 transition-all duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-[#FFF5F0]/70 to-[#FFD8C2]/50 backdrop-blur-[16px]" />
+                <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-white/70" />
               </div>
-              <div>
-                <h4 className="text-[11px] font-black uppercase tracking-widest text-[#3E2723]">Clinical Guidance</h4>
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">CareBot can explain scan results.</p>
+              {/* Content */}
+              <div className="relative z-10 h-full flex items-center gap-4 p-4">
+                <div className="relative shrink-0">
+                  <div className="absolute inset-0 rounded-xl bg-[#E76F51]/20 blur-lg scale-150" />
+                  <div className="relative w-12 h-12 rounded-xl bg-white/70 backdrop-blur-md flex items-center justify-center text-[#E76F51] border border-white/80 shadow-[0_8px_20px_rgba(231,111,81,0.2)] group-hover:bg-[#E76F51] group-hover:text-white transition-all duration-500">
+                    <Stethoscope size={22} className="group-hover:scale-110 transition-transform" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-[#3E2723]">Clinical Guidance</h4>
+                  <p className="text-[10px] text-[#5C4033]/70 font-medium mt-0.5">CareBot explains your scan results.</p>
+                </div>
+                <ChevronRight size={16} className="text-[#E76F51]/50 group-hover:text-[#E76F51] group-hover:translate-x-1 transition-all shrink-0" />
               </div>
-              <ChevronRight size={16} className="text-slate-300 ml-auto group-hover:text-[#E76F51] group-hover:translate-x-1 transition-all" />
            </motion.div>
 
+           {/* Privacy Card */}
            <motion.div 
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6, type: "spring", stiffness: 300, damping: 25 }}
-              whileHover={{ y: -5, scale: 1.02 }}
-              className="p-4 rounded-[1.25rem] flex items-center gap-4 bg-white/80 backdrop-blur-md border border-[#FFD8C2]/80 shadow-sm hover:shadow-[0_15px_30px_rgba(231,111,81,0.1)] hover:border-[#E76F51]/40 transition-all cursor-pointer group"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="relative rounded-[1.5rem] overflow-hidden cursor-pointer group h-[96px]"
            >
-              <div className="w-12 h-12 rounded-xl bg-[#FFF5F0] flex items-center justify-center text-[#E76F51] shrink-0 border border-[#FFD8C2]/40 group-hover:bg-gradient-to-br group-hover:from-[#E76F51] group-hover:to-[#D4603F] group-hover:text-white transition-all duration-500">
-                <ShieldCheck size={22} className="group-hover:scale-110 transition-transform" />
+              {/* Background image */}
+              <div className="absolute inset-0">
+                <Image src="/scan-box-image.png" alt="" fill className="object-cover object-right opacity-25 saturate-150 group-hover:scale-110 group-hover:opacity-30 transition-all duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-[#FFF5F0]/70 to-[#FFD8C2]/50 backdrop-blur-[16px]" />
+                <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-white/70" />
               </div>
-              <div>
-                <h4 className="text-[11px] font-black uppercase tracking-widest text-[#3E2723]">Privacy Protected</h4>
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">Chat data is encrypted and secure.</p>
+              {/* Content */}
+              <div className="relative z-10 h-full flex items-center gap-4 p-4">
+                <div className="relative shrink-0">
+                  <div className="absolute inset-0 rounded-xl bg-[#E76F51]/20 blur-lg scale-150" />
+                  <div className="relative w-12 h-12 rounded-xl bg-white/70 backdrop-blur-md flex items-center justify-center text-[#E76F51] border border-white/80 shadow-[0_8px_20px_rgba(231,111,81,0.2)] group-hover:bg-[#E76F51] group-hover:text-white transition-all duration-500">
+                    <ShieldCheck size={22} className="group-hover:scale-110 transition-transform" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-[#3E2723]">Privacy Protected</h4>
+                  <p className="text-[10px] text-[#5C4033]/70 font-medium mt-0.5">Chat data is encrypted and secure.</p>
+                </div>
+                <ChevronRight size={16} className="text-[#E76F51]/50 group-hover:text-[#E76F51] group-hover:translate-x-1 transition-all shrink-0" />
               </div>
-              <ChevronRight size={16} className="text-slate-300 ml-auto group-hover:text-[#E76F51] group-hover:translate-x-1 transition-all" />
            </motion.div>
         </div>
       </div>
