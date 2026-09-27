@@ -123,28 +123,34 @@ function RoleSelectionContent() {
           onClick={() => handleSelect("doctor")}
           className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-gradient-to-br from-[#3E2723] to-[#5C4033] shadow-[0_25px_60px_rgba(62,39,35,0.35)] min-h-[360px] flex flex-col"
         >
-          {/* Blurred background image */}
+          {/* Blurred full-card background — doctor photo fills top half */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/scan-box-image.png"
-              alt="Doctor dashboard"
+              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=600&h=800"
+              alt="Doctor"
               fill
-              className="object-cover opacity-20 saturate-150 group-hover:scale-110 group-hover:opacity-30 transition-all duration-1000"
+              className="object-cover object-top opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-1000"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723] via-[#3E2723]/85 to-[#5C4033]/50" />
-            {/* Shimmer ring */}
+            {/* Dark gradient overlay — fades photo into dark card at bottom */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#3E2723]/30 via-[#3E2723]/70 to-[#3E2723]" />
             <div className="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/10" />
-            {/* Radial glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(231,111,81,0.15),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(231,111,81,0.12),transparent_60%)]" />
           </div>
 
-          {/* Doctor icon badge */}
+          {/* Doctor photo circular badge */}
           <div className="relative z-10 flex justify-center pt-10 mb-2">
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-[#E76F51]/30 blur-xl scale-150 animate-pulse" />
-              <div className="relative w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-                <Stethoscope size={36} strokeWidth={1.5} />
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-white/30 shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
+                <Image
+                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200"
+                  alt="Doctor"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
               </div>
+              {/* Online badge */}
+              <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#3E2723] shadow-md" />
             </div>
           </div>
 
@@ -197,25 +203,35 @@ function RoleSelectionContent() {
           onClick={() => handleSelect("patient")}
           className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-white shadow-[0_25px_60px_rgba(92,64,51,0.14)] border border-[#FFD8C2]/80 min-h-[360px] flex flex-col"
         >
-          {/* Blurred background image */}
+          {/* Patient photo fills top of card */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/image-box-pic.jpg"
-              alt="Patient dashboard"
+              src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=600&h=800"
+              alt="Patient"
               fill
-              className="object-cover opacity-15 saturate-150 group-hover:scale-110 group-hover:opacity-22 transition-all duration-1000"
+              className="object-cover object-top opacity-30 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000"
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FFF5F0]/80 to-[#FFD8C2]/40 backdrop-blur-[2px]" />
+            {/* Warm frosted overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-[#FFF5F0]/80 to-[#FFF5F0]" />
             <div className="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/80" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(231,111,81,0.07),transparent_60%)]" />
           </div>
 
-          {/* Patient icon badge */}
+          {/* Patient photo circular badge */}
           <div className="relative z-10 flex justify-center pt-10 mb-2">
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-[#E76F51]/15 blur-xl scale-150 animate-pulse" />
-              <div className="relative w-20 h-20 rounded-full bg-[#FFF0E8] border-2 border-[#FFD8C2] flex items-center justify-center text-[#E76F51] shadow-[0_15px_40px_rgba(231,111,81,0.2)]">
-                <User size={36} strokeWidth={1.5} />
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-[#FFD8C2] shadow-[0_15px_40px_rgba(231,111,81,0.25)]">
+                <Image
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200&h=200"
+                  alt="Patient"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+              {/* Verified badge */}
+              <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-[#E76F51] border-2 border-white shadow-md flex items-center justify-center">
+                <svg viewBox="0 0 10 10" className="w-2.5 h-2.5 fill-white"><path d="M8.5 2L4 7.5 1.5 5" stroke="white" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
             </div>
           </div>
