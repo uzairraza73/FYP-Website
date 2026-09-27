@@ -36,6 +36,7 @@ export const PremiumButton = ({
         variants[variant],
         className
       )}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(props as any)}
     >
       {/* Animated Border Shade / Glow */}

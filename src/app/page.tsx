@@ -1,17 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/GlassCard";
-import { PremiumButton } from "@/components/PremiumButton";
+import { FeatureModal } from "@/components/FeatureModal";
 import {
   ShieldCheck, Zap, Activity, Clock, ArrowRight,
   Stethoscope, Microscope, Globe, Lock,
-  ChevronDown, CheckCircle2, Cpu, HeartPulse
+  ChevronDown, CheckCircle2
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import heroImage from "../../pic folder/hero session.png";
+import scanBoxImg from "../../pic folder/scan box image.png";
 
 const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.div
@@ -25,6 +27,9 @@ const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 );
 
 export default function Home() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedFeature, setSelectedFeature] = useState<any>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const features = [
     {
       title: "Precision AI Scan",
@@ -61,6 +66,25 @@ export default function Home() {
     { label: "Accuracy Rate", value: "99.2%" },
     { label: "Global Users", value: "50k+" },
     { label: "Specialists", value: "500+" }
+  ];
+
+  const faqs = [
+    {
+      question: "Is the AI scan a medical diagnosis?",
+      answer: "No. Our AI scan is a screening tool, not a medical diagnosis. Always consult a qualified dermatologist for professional evaluation."
+    },
+    {
+      question: "How is my data protected?",
+      answer: "Your privacy is our priority. Your information and images are protected with appropriate security measures and handled according to our Privacy Policy."
+    },
+    {
+      question: "What skin types are supported?",
+      answer: "Our AI is designed to analyze a wide range of skin tones and types. Results may vary, so professional medical advice is recommended when concerned."
+    },
+    {
+      question: "Can I share my results with a doctor?",
+      answer: "Yes. You can share your scan results with a doctor or dermatologist to provide additional information during your professional evaluation."
+    }
   ];
 
   return (
@@ -165,13 +189,13 @@ export default function Home() {
               { icon: Stethoscope, title: "Consult", desc: "Get care cards and find local specialists." }
             ].map((step, idx) => (
               <Reveal key={idx} delay={idx * 0.1}>
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-20 h-20 rounded-[1.5rem] bg-[#FFEBE0] flex items-center justify-center text-[#E76F51] mb-6 border border-[#FFD8C2] shadow-sm relative">
-                    <div className="absolute inset-0 rounded-[1.5rem] bg-[#E76F51]/10 animate-ping opacity-30" />
-                    <step.icon size={28} />
+                <div className="flex flex-col items-center text-center group">
+                  <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-white/90 to-white/40 backdrop-blur-xl flex items-center justify-center text-[#E76F51] mb-8 border-[1.5px] border-white shadow-[0_15px_35px_rgba(231,111,81,0.15)] relative transform transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(231,111,81,0.25)] overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FFEBE0]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <step.icon size={36} className="relative z-10 transform transition-transform duration-500 group-hover:scale-110" />
                   </div>
-                  <h3 className="text-lg font-black text-[#1A1A1A] mb-3">{step.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed max-w-[200px] font-medium">{step.desc}</p>
+                  <h3 className="text-2xl font-black text-[#1A1A1A] mb-4 font-plus-jakarta">{step.title}</h3>
+                  <p className="text-base text-slate-600 leading-relaxed max-w-[240px] font-medium">{step.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -182,41 +206,54 @@ export default function Home() {
       {/* Final CTA Box */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
         <Reveal delay={0.2}>
-          <div className="relative p-1 rounded-[3rem] bg-gradient-to-br from-[#FFEBE0] via-[#FFF5F0] to-transparent border border-[#FFD8C2] overflow-hidden group shadow-2xl">
-            <GlassCard className="bg-white/80 text-[#1A1A1A] text-center py-24 px-10 border-none overflow-hidden relative shadow-inner rounded-[2.8rem]">
-              {/* Animated Background Elements */}
+          <div className="relative p-[1.5px] rounded-[3rem] bg-gradient-to-br from-white/80 via-white/40 to-white/10 overflow-hidden group shadow-[0_20px_50px_rgba(231,111,81,0.15)] hover:shadow-[0_30px_60px_rgba(231,111,81,0.25)] transition-all duration-700 hover:-translate-y-2">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0 overflow-hidden rounded-[3rem]">
+              <Image
+                src={scanBoxImg}
+                alt="Scan Background"
+                fill
+                className="object-cover opacity-100 transition-transform duration-[1.5s] group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-white/10" />
+            </div>
+
+            <GlassCard className="bg-white/20 backdrop-blur-sm text-[#1A1A1A] text-center py-24 px-10 border-none overflow-hidden relative rounded-[3rem]">
+              {/* Animated Background Elements (now blending with image) */}
               <motion.div
                 animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                  x: [0, 20, 0]
+                  scale: [1, 1.25, 1],
+                  opacity: [0.2, 0.4, 0.2],
+                  x: [0, 30, 0]
                 }}
-                transition={{ duration: 8, repeat: Infinity }}
-                className="absolute -top-24 -right-24 w-[500px] h-[500px] bg-[#FFD8C2]/60 rounded-full blur-[100px] pointer-events-none"
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-[#E76F51]/20 to-[#FFD8C2]/40 rounded-full blur-[100px] pointer-events-none mix-blend-color-burn"
               />
               <motion.div
                 animate={{
                   scale: [1.2, 1, 1.2],
-                  opacity: [0.2, 0.4, 0.2],
-                  x: [0, -20, 0]
+                  opacity: [0.15, 0.3, 0.15],
+                  x: [0, -30, 0],
+                  y: [0, 20, 0]
                 }}
-                transition={{ duration: 10, repeat: Infinity }}
-                className="absolute -bottom-24 -left-24 w-[500px] h-[500px] bg-[#FFEBE0]/80 rounded-full blur-[100px] pointer-events-none"
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -bottom-32 -left-32 w-[600px] h-[600px] bg-gradient-to-br from-[#FFCBA4]/30 to-[#FFEBE0]/50 rounded-full blur-[100px] pointer-events-none mix-blend-multiply"
               />
 
               <div className="relative z-10">
                 <motion.h2
                   whileInView={{ scale: [0.95, 1] }}
                   transition={{ duration: 1 }}
-                  className="text-4xl md:text-6xl font-black mb-10 font-plus-jakarta leading-tight tracking-tight text-[#111827]"
+                  className="text-4xl md:text-6xl font-black mb-10 font-plus-jakarta leading-tight tracking-tight text-[#111827] drop-shadow-sm"
                 >
                   Elevate your skin <br />
                   <span className="text-[#E76F51] italic">health standard.</span>
                 </motion.h2>
 
                 <Link href="/scan">
-                  <button className="px-12 py-4 text-base font-bold bg-[#5C4033] border-none text-white rounded-[1.25rem] hover:bg-[#3E2723] shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center justify-center mx-auto">
-                    Start Clinical Scan <ArrowRight className="inline-block ml-3 group-hover:translate-x-1 transition-transform" size={18} />
+                  <button className="relative overflow-hidden px-14 py-5 text-lg font-bold text-white rounded-[1.5rem] bg-gradient-to-r from-[#E76F51] to-[#FF8C69] hover:from-[#D45E40] hover:to-[#E76F51] shadow-[0_15px_35px_rgba(231,111,81,0.4)] hover:shadow-[0_25px_50px_rgba(231,111,81,0.6)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-center mx-auto group/btn">
+                    <div className="absolute inset-0 bg-white/20 w-1/2 -skew-x-12 -translate-x-[150%] group-hover/btn:translate-x-[250%] transition-transform duration-700 ease-in-out" />
+                    Start Clinical Scan <ArrowRight className="inline-block ml-3 group-hover/btn:translate-x-2 transition-transform duration-300" size={22} />
                   </button>
                 </Link>
 
@@ -254,33 +291,54 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="px-6 py-24 max-w-7xl mx-auto">
-        <Reveal>
-          <div className="mb-16 text-center">
-            <h2 className="text-4xl font-black text-[#111827] font-plus-jakarta tracking-tight">Engineered for Accuracy.</h2>
-          </div>
-        </Reveal>
+      <section className="px-6 py-24 relative overflow-hidden">
+        {/* Blended Background Image */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <Image
+            src={scanBoxImg}
+            alt="Features Background"
+            fill
+            className="object-cover opacity-100 mix-blend-overlay"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FFF5F0]/95 via-[#FFEBE0]/50 to-[#FFF5F0]/95" />
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[280px]">
-          {features.map((feature, idx) => (
-            <Reveal key={idx} delay={idx * 0.1}>
-              <GlassCard
-                className={cn(
-                  "relative overflow-hidden group flex flex-col justify-end p-8 border-[#FFD8C2] bg-white/60 shadow-lg hover:shadow-xl hover:bg-white/90 h-full",
-                  feature.className
-                )}
-              >
-                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.03] transition-opacity group-hover:opacity-[0.08]", feature.gradient)} />
-                <div className="relative z-10">
-                  <div className="mb-6 w-14 h-14 rounded-2xl bg-[#FFF5F0] border border-[#FFD8C2] flex items-center justify-center text-[#E76F51] transition-transform group-hover:scale-110 shadow-sm">
-                    <feature.icon size={28} />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <Reveal>
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl md:text-4xl font-black text-[#111827] font-plus-jakarta tracking-tight">Engineered for Accuracy.</h2>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, idx) => {
+              return (
+                <Reveal key={idx} delay={idx * 0.1}>
+                  <div onClick={() => setSelectedFeature(feature)} className="block h-[220px] cursor-pointer">
+                    <GlassCard
+                      className="relative overflow-hidden group flex flex-col items-center justify-center text-center p-6 border-[1.5px] border-white/40 hover:border-[#E76F51]/80 bg-white/10 hover:bg-gradient-to-br hover:from-white/40 hover:to-white/20 backdrop-blur-xl shadow-[0_10px_30px_rgba(231,111,81,0.1)] hover:shadow-[0_20px_40px_rgba(231,111,81,0.3)] transition-all duration-500 hover:-translate-y-2 h-full"
+                    >
+                      <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.05] transition-opacity group-hover:opacity-[0.1]", feature.gradient)} />
+                      <div className="relative z-10 flex flex-col items-center">
+                        <div className="w-14 h-14 rounded-full border-[1.5px] border-[#E76F51]/40 flex items-center justify-center text-[#E76F51] transition-transform duration-500 group-hover:scale-110 group-hover:border-[#E76F51] shadow-sm mb-4 bg-white/30 backdrop-blur-sm">
+                          <feature.icon size={24} />
+                        </div>
+                        <h3 className="text-lg font-black text-[#111827] group-hover:text-[#E76F51] transition-colors duration-300">{feature.title}</h3>
+                        
+                        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out w-full">
+                          <div className="overflow-hidden">
+                            <p className="text-xs text-slate-600 leading-relaxed font-medium pt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 max-w-[200px] mx-auto">
+                              {feature.desc}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </GlassCard>
                   </div>
-                  <h3 className="text-xl font-black text-[#111827] mb-3">{feature.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed font-medium">{feature.desc}</p>
-                </div>
-              </GlassCard>
-            </Reveal>
-          ))}
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -290,21 +348,36 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black text-[#111827] mb-10 font-plus-jakarta text-center">Protocol FAQ</h2>
             <div className="space-y-4 text-left">
-              {[
-                "Is the AI scan a medical diagnosis?",
-                "How is my data protected?",
-                "What skin types are supported?",
-                "Can I share my results with a doctor?"
-              ].map((q, i) => (
-                <GlassCard key={i} className="p-6 flex items-center justify-between group cursor-pointer hover:border-[#E76F51]/30 bg-white/60 border-transparent shadow-sm hover:shadow-md hover:bg-white/90">
-                  <span className="text-sm font-bold text-slate-600 group-hover:text-[#1A1A1A] transition-colors">{q}</span>
-                  <ChevronDown className="text-slate-400 group-hover:text-[#E76F51] transition-colors" size={20} />
+              {faqs.map((faq, i) => (
+                <GlassCard 
+                  key={i} 
+                  className={`p-6 flex flex-col group cursor-pointer border-transparent shadow-sm hover:shadow-md transition-all ${openFaqIndex === i ? 'bg-white/90 border-[#E76F51]/30' : 'bg-white/60 hover:bg-white/90 hover:border-[#E76F51]/30'}`}
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-sm font-bold text-slate-600 group-hover:text-[#1A1A1A] transition-colors">{faq.question}</span>
+                    <ChevronDown className={`text-slate-400 group-hover:text-[#E76F51] transition-transform duration-300 ${openFaqIndex === i ? 'rotate-180 text-[#E76F51]' : ''}`} size={20} />
+                  </div>
+                  
+                  {/* Expanded Answer */}
+                  <motion.div
+                    initial={false}
+                    animate={{ height: openFaqIndex === i ? "auto" : 0, opacity: openFaqIndex === i ? 1 : 0 }}
+                    className="overflow-hidden"
+                  >
+                    <p className="pt-4 text-sm text-slate-500 leading-relaxed font-medium">
+                      {faq.answer}
+                    </p>
+                  </motion.div>
                 </GlassCard>
               ))}
             </div>
           </div>
         </Reveal>
       </section>
+
+      {/* Feature Modal */}
+      <FeatureModal feature={selectedFeature} onClose={() => setSelectedFeature(null)} />
     </div>
   );
 }

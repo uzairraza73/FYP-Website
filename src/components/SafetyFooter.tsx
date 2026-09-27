@@ -46,8 +46,8 @@ export const SafetyFooter = () => {
             <ul className="space-y-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
               <li><Link href="/scan" className="hover:text-[#1A1A1A] transition-colors">AI Scanner</Link></li>
               <li><Link href="/history" className="hover:text-[#1A1A1A] transition-colors">Health History</Link></li>
-              <li><Link href="/" className="hover:text-[#1A1A1A] transition-colors">Methodology</Link></li>
-              <li><Link href="/" className="hover:text-[#1A1A1A] transition-colors">Clinical Data</Link></li>
+              <li><Link href="/methodology" className="hover:text-[#1A1A1A] transition-colors">Methodology</Link></li>
+              <li><Link href="/clinical-data" className="hover:text-[#1A1A1A] transition-colors">Clinical Data</Link></li>
             </ul>
           </div>
 
@@ -55,10 +55,10 @@ export const SafetyFooter = () => {
           <div>
             <h4 className="font-black mb-6 uppercase text-[10px] tracking-[0.2em] text-[#E76F51]">Resources</h4>
             <ul className="space-y-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-              <li><Link href="/" className="hover:text-[#1A1A1A] transition-colors">Research Papers</Link></li>
-              <li><Link href="/" className="hover:text-[#1A1A1A] transition-colors">Health Guides</Link></li>
-              <li><Link href="/" className="hover:text-[#1A1A1A] transition-colors">Compliance</Link></li>
-              <li><Link href="/" className="hover:text-[#1A1A1A] transition-colors">Community</Link></li>
+              <li><Link href="/research-papers" className="hover:text-[#1A1A1A] transition-colors">Research Papers</Link></li>
+              <li><Link href="/health-guides" className="hover:text-[#1A1A1A] transition-colors">Health Guides</Link></li>
+              <li><Link href="/compliance" className="hover:text-[#1A1A1A] transition-colors">Compliance</Link></li>
+              <li><Link href="/community" className="hover:text-[#1A1A1A] transition-colors">Community</Link></li>
             </ul>
           </div>
 
@@ -91,9 +91,9 @@ export const SafetyFooter = () => {
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#FFD8C2] gap-6">
           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">© 2024 oncura AI Platform. HIPAA Compliant.</p>
           <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">
-            <Link href="/" className="hover:text-[#1A1A1A] transition-colors">Privacy</Link>
-            <Link href="/" className="hover:text-[#1A1A1A] transition-colors">Terms</Link>
-            <Link href="/" className="hover:text-[#1A1A1A] transition-colors">Security</Link>
+            <Link href="/privacy" className="hover:text-[#1A1A1A] transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-[#1A1A1A] transition-colors">Terms</Link>
+            <Link href="/security" className="hover:text-[#1A1A1A] transition-colors">Security</Link>
           </div>
         </div>
       </div>

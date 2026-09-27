@@ -8,9 +8,10 @@ import { useSettingsStore } from "@/store/useSettingsStore";
 
 interface BackButtonProps {
   className?: string;
+  variant?: "default" | "brown";
 }
 
-export const BackButton = ({ className }: BackButtonProps) => {
+export const BackButton = ({ className, variant = "default" }: BackButtonProps) => {
   const router = useRouter();
   const { theme } = useSettingsStore();
 
@@ -22,16 +23,20 @@ export const BackButton = ({ className }: BackButtonProps) => {
       whileHover={{ scale: 1.1, x: -5 }}
       whileTap={{ scale: 0.95 }}
       className={cn(
-        "group flex items-center gap-3 px-4 py-2 rounded-2xl transition-all duration-300 shadow-lg relative z-20 cursor-pointer",
-        theme === 'dark' 
-          ? "bg-slate-900/50 border border-white/5 text-slate-400 hover:text-white hover:bg-blue-600/20 hover:border-blue-500/30" 
-          : "bg-white/80 border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50 shadow-slate-200/50",
+        "group flex items-center gap-3 px-4 py-2 rounded-[1.25rem] transition-all duration-300 shadow-lg relative z-20 cursor-pointer",
+        variant === "brown" 
+          ? "bg-white border border-[#FFD8C2] text-[#5C4033] hover:text-[#E76F51] hover:bg-[#FFF5F0] hover:border-[#E76F51] shadow-[0_10px_20px_rgba(92,64,51,0.05)]"
+          : (theme === 'dark' 
+            ? "bg-slate-900/50 border border-white/5 text-slate-400 hover:text-white hover:bg-blue-600/20 hover:border-blue-500/30" 
+            : "bg-white/80 border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50 shadow-slate-200/50"),
         className
       )}
     >
       <div className={cn(
         "w-8 h-8 rounded-xl flex items-center justify-center transition-colors",
-        theme === 'dark' ? "bg-white/5 group-hover:bg-blue-500/20" : "bg-slate-100 group-hover:bg-blue-100"
+        variant === "brown"
+          ? "bg-[#FFF5F0] group-hover:bg-[#E76F51] group-hover:text-white text-[#E76F51]"
+          : (theme === 'dark' ? "bg-white/5 group-hover:bg-blue-500/20" : "bg-slate-100 group-hover:bg-blue-100")
       )}>
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
       </div>

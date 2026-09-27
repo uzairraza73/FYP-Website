@@ -11,7 +11,6 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar
 } from "recharts";
 import { 
-  ArrowLeft, 
   Share2, Download, Sparkles
 } from "lucide-react";
 import { cn } from "@/utils/cn";
