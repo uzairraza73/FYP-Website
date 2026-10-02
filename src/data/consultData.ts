@@ -1,7 +1,10 @@
 export interface DoctorAvailability {
   id: string;
   name: string;
-  specialty: string;
+  specialty: string; // General specialty like 'Senior Dermatologist'
+  skinCancerSpecialties: string[]; // Specific 7 types of skin cancer
+  city: string;
+  area: string;
   phone: string;
   age: number;
   image: string;
@@ -18,6 +21,9 @@ export const availableDoctors: DoctorAvailability[] = [
     id: "d1",
     name: "Dr. Amna Saeed",
     specialty: "Senior Dermatologist",
+    skinCancerSpecialties: ["Melanoma", "Basal Cell Carcinoma"],
+    city: "Lahore",
+    area: "Johar Town",
     phone: "+923030042034",
     age: 42,
     image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200",
@@ -32,6 +38,9 @@ export const availableDoctors: DoctorAvailability[] = [
     id: "d2",
     name: "Dr. Hassan Ahmed",
     specialty: "Oncology Specialist",
+    skinCancerSpecialties: ["Squamous Cell Carcinoma", "Actinic Keratoses"],
+    city: "Lahore",
+    area: "Gulberg",
     phone: "+923456789012",
     age: 45,
     image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200&h=200",
@@ -45,6 +54,9 @@ export const availableDoctors: DoctorAvailability[] = [
     id: "d3",
     name: "Dr. Fatima Zehra",
     specialty: "Skin Cancer Specialist",
+    skinCancerSpecialties: ["Melanoma", "Benign Keratosis", "Dermatofibroma"],
+    city: "Lahore",
+    area: "DHA",
     phone: "+923214567890",
     age: 38,
     image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=200&h=200",
@@ -53,6 +65,22 @@ export const availableDoctors: DoctorAvailability[] = [
       { day: "Monday", date: "May 11", timeSlot: "03:00 PM - 07:00 PM" },
       { day: "Thursday", date: "May 14", timeSlot: "01:00 PM - 05:00 PM" },
       { day: "Saturday", date: "May 16", timeSlot: "10:00 AM - 02:00 PM" }
+    ]
+  },
+  {
+    id: "d4",
+    name: "Dr. Usman Ali",
+    specialty: "Dermatologist",
+    skinCancerSpecialties: ["Melanocytic Nevi", "Vascular Lesions"],
+    city: "Islamabad",
+    area: "F-8 Markaz",
+    phone: "+923001234567",
+    age: 50,
+    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=200&h=200",
+    rating: 4.7,
+    presence: [
+      { day: "Tuesday", date: "May 12", timeSlot: "10:00 AM - 02:00 PM" },
+      { day: "Wednesday", date: "May 13", timeSlot: "03:00 PM - 07:00 PM" }
     ]
   }
 ];

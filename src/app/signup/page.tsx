@@ -1,354 +1,402 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GlassCard } from "@/components/GlassCard";
-import { PremiumButton } from "@/components/PremiumButton";
-import { 
-  Mail, Lock, User, ArrowRight, Activity, 
-  Globe, CheckCircle2, Award, Hash, 
-  Calendar, Stethoscope, Camera,
-  Upload
+import {
+  Mail, Lock, User, ArrowRight, ShieldCheck, Globe,
+  Stethoscope, Hash, Calendar, Camera, Upload,
+  CheckCircle2, Heart, MapPin, Award, EyeOff, Droplets, AlertCircle, FileText
 } from "lucide-react";
 import Link from "next/link";
 import { useState, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
-import { cn } from "@/utils/cn";
+import Image from "next/image";
 
+// ─── Shared input styles ──────────────────────────────────────────────────────
+const inputCls =
+  "w-full bg-transparent border border-[#D7CCC8] rounded-full py-3 pl-11 pr-4 text-xs text-[#3E2723] placeholder:text-[#A1887F] focus:outline-none focus:border-[#8D6E63] focus:ring-1 focus:ring-[#8D6E63]/20 transition-all shadow-sm";
+
+const selectCls =
+  "w-full bg-transparent border border-[#D7CCC8] rounded-full py-3 pl-11 pr-4 text-xs text-[#3E2723] focus:outline-none focus:border-[#8D6E63] focus:ring-1 focus:ring-[#8D6E63]/20 transition-all shadow-sm appearance-none";
+
+function FieldIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none">
+      {children}
+    </div>
+  );
+}
+
+// ─── DOCTOR SIGNUP ────────────────────────────────────────────────────────────
+function DoctorSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) => void }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [age, setAge] = useState("");
+  const [city, setCity] = useState("");
+  const [area, setArea] = useState("");
+  const [licenseNumber, setLicenseNumber] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [degree, setDegree] = useState("");
+  const [profilePic, setProfilePic] = useState<File | null>(null);
+  const [cnicFront, setCnicFront] = useState<File | null>(null);
+  const [cnicBack, setCnicBack] = useState<File | null>(null);
+  const [doctorDegreeFile, setDoctorDegreeFile] = useState<File | null>(null);
+
+  const profilePicRef = useRef<HTMLInputElement>(null);
+  const cnicFrontRef = useRef<HTMLInputElement>(null);
+  const cnicBackRef = useRef<HTMLInputElement>(null);
+  const degreeFileRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center font-plus-jakarta bg-[#FAF6F3] p-4">
+      <div className="w-full max-w-6xl flex bg-[#FDF8F3] rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(92,64,51,0.2)] overflow-hidden my-6">
+
+        {/* ── LEFT SIDE ── */}
+        <div className="hidden lg:flex lg:w-[35%] relative bg-[#4A3225] flex-shrink-0">
+          <div className="absolute inset-0">
+            <Image
+              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1200"
+              alt="Doctor"
+              fill
+              className="object-cover opacity-85"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/95 via-[#3E2723]/40 to-[#3E2723]/50" />
+          </div>
+          <div className="relative z-10 flex flex-col justify-between p-10 w-full h-full text-white min-h-[700px]">
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-3">
+              <div className="w-12 h-12 flex items-center justify-center text-[#FFD8C2]">
+                <Stethoscope size={38} className="stroke-[1.5]" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-serif italic text-[#FFD8C2]">Join as a</h2>
+                <h3 className="text-4xl font-black tracking-tight">Doctor</h3>
+              </div>
+              <p className="text-sm text-white/80 leading-relaxed pt-1 max-w-[200px]">
+                Help patients get better skin cancer diagnostics with AI.
+              </p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center justify-center bg-white/20 p-1.5 rounded-lg backdrop-blur-sm">
+                  <ShieldCheck size={18} className="text-[#FFD8C2]" />
+                </div>
+                <span className="text-base font-black tracking-widest uppercase">ONCURA</span>
+              </div>
+              <p className="text-[11px] font-medium text-white/60">Better Insights. Healthier Tomorrow.</p>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* ── RIGHT SIDE (FORM) ── */}
+        <div className="w-full lg:w-[65%] flex flex-col justify-start items-center p-8 lg:px-12 lg:py-10 overflow-y-auto max-h-screen">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl space-y-5">
+            <div className="space-y-2">
+              <div className="w-11 h-11 rounded-full bg-[#EADECF] flex items-center justify-center text-[#5C4033]">
+                <Stethoscope size={22} />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-[#3E2723] tracking-tight">
+                  Doctor <span className="text-[#8D6E63]">Registration</span>
+                </h1>
+                <p className="text-[#6D4C41] text-xs mt-1">Complete your profile to start helping patients.</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Row 1: Name & Email */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative group">
+                  <FieldIcon><User size={15} /></FieldIcon>
+                  <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Full Name (e.g. Dr. Ali)" className={inputCls} required />
+                </div>
+                <div className="relative group">
+                  <FieldIcon><Mail size={15} /></FieldIcon>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email address" className={inputCls} required />
+                </div>
+              </div>
+
+              {/* Row 2: Age & Password */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative group">
+                  <FieldIcon><Calendar size={15} /></FieldIcon>
+                  <input type="number" value={age} onChange={e => setAge(e.target.value)} placeholder="Age" className={inputCls} min="25" max="90" required />
+                </div>
+                <div className="relative group">
+                  <FieldIcon><Lock size={15} /></FieldIcon>
+                  <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className={inputCls} required />
+                  <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8D6E63]"><EyeOff size={14} /></button>
+                </div>
+              </div>
+
+              {/* Row 3: License & Specialization */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative group">
+                  <FieldIcon><Hash size={15} /></FieldIcon>
+                  <input type="text" value={licenseNumber} onChange={e => setLicenseNumber(e.target.value)} placeholder="Doctor Licence No. (PMDC)" className={inputCls} required />
+                </div>
+                <div className="relative group">
+                  <FieldIcon><Award size={15} /></FieldIcon>
+                  <select value={specialization} onChange={e => setSpecialization(e.target.value)} className={selectCls} required>
+                    <option value="">Specialization</option>
+                    <option>Dermatologist</option>
+                    <option>Oncologist</option>
+                    <option>General Physician</option>
+                    <option>Plastic Surgeon</option>
+                    <option>Pathologist</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 4: Degree & City */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative group">
+                  <FieldIcon><FileText size={15} /></FieldIcon>
+                  <input type="text" value={degree} onChange={e => setDegree(e.target.value)} placeholder="Medical Degree (e.g. MBBS, MD)" className={inputCls} required />
+                </div>
+                <div className="relative group">
+                  <FieldIcon><MapPin size={15} /></FieldIcon>
+                  <select value={city} onChange={e => setCity(e.target.value)} className={selectCls} required>
+                    <option value="">Select City</option>
+                    <option>Lahore</option><option>Karachi</option><option>Islamabad</option>
+                    <option>Rawalpindi</option><option>Faisalabad</option><option>Multan</option>
+                    <option>Peshawar</option><option>Quetta</option><option>Gujranwala</option>
+                    <option>Sialkot</option><option>Bahawalpur</option><option>Sargodha</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 5: Area */}
+              <div className="relative group">
+                <FieldIcon><MapPin size={15} /></FieldIcon>
+                <input type="text" value={area} onChange={e => setArea(e.target.value)} placeholder="Area / Locality (e.g. Johar Town, DHA, Gulberg)" className={inputCls} required />
+              </div>
+
+              {/* Profile Photo */}
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-widest text-[#8D6E63] mb-2 ml-1">Profile Photo</p>
+                <div onClick={() => profilePicRef.current?.click()} className={`w-full border border-dashed rounded-2xl py-3 px-4 flex items-center gap-3 cursor-pointer transition-all ${profilePic ? "border-[#8D6E63] bg-[#F5EDE6]" : "border-[#D7CCC8] bg-[#FAF6F3] hover:bg-[#F5EDE6]"}`}>
+                  <div className="w-8 h-8 rounded-full bg-[#EADECF] flex items-center justify-center text-[#5C4033]">
+                    {profilePic ? <CheckCircle2 size={15} /> : <Camera size={15} />}
+                  </div>
+                  <span className="text-xs font-semibold text-[#6D4C41] truncate">{profilePic ? profilePic.name : "Upload your profile picture"}</span>
+                  <input ref={profilePicRef} type="file" accept="image/*" className="hidden" onChange={e => setProfilePic(e.target.files?.[0] || null)} />
+                </div>
+              </div>
+
+              {/* Document Uploads */}
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-widest text-[#8D6E63] mb-2 ml-1">Upload Verification Documents</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { label: "CNIC Front", ref: cnicFrontRef, file: cnicFront, setFile: setCnicFront, icon: <Upload size={18} /> },
+                    { label: "CNIC Back", ref: cnicBackRef, file: cnicBack, setFile: setCnicBack, icon: <Upload size={18} /> },
+                    { label: "Doctor Degree", ref: degreeFileRef, file: doctorDegreeFile, setFile: setDoctorDegreeFile, icon: <FileText size={18} /> },
+                  ].map(({ label, ref, file, setFile, icon }) => (
+                    <div key={label} onClick={() => ref.current?.click()} className={`flex flex-col items-center justify-center p-4 rounded-2xl border border-dashed cursor-pointer transition-all ${file ? "border-[#8D6E63] bg-[#F5EDE6]" : "border-[#D7CCC8] bg-[#FAF6F3] hover:bg-[#F5EDE6]"}`}>
+                      <div className={file ? "text-[#5C4033]" : "text-[#A1887F]"}>{icon}</div>
+                      <span className="text-[9px] font-bold uppercase text-[#8D6E63] mt-2 text-center">{label}</span>
+                      {file && <span className="text-[8px] text-[#5C4033] truncate w-full text-center mt-0.5">{file.name}</span>}
+                      <input ref={ref} type="file" accept="image/*,application/pdf" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button type="submit" className="w-full bg-[#5C4033] hover:bg-[#4A3225] text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] transition-all flex items-center justify-center gap-2 group mt-1">
+                Create Doctor Account <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <div className="relative flex items-center justify-center py-1">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#D7CCC8]" /></div>
+                <span className="relative px-3 bg-[#FDF8F3] text-[9px] font-bold text-[#8D6E63] uppercase tracking-widest">OR</span>
+              </div>
+
+              <button type="button" className="w-full flex items-center justify-center gap-2 border border-[#D7CCC8] hover:bg-white text-[#3E2723] rounded-full py-3 text-xs font-bold shadow-sm transition-all">
+                <Globe size={14} className="text-blue-500" /> Sign Up with Google
+              </button>
+
+              <p className="text-center text-[11px] font-medium text-[#8D6E63]">
+                Already have an account?{" "}
+                <Link href="/login?role=doctor" className="font-bold text-[#5C4033] hover:text-[#3E2723] transition-colors">Sign In</Link>
+              </p>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── PATIENT SIGNUP ───────────────────────────────────────────────────────────
+function PatientSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) => void }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [age, setAge] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [disability, setDisability] = useState("");
+
+  return (
+    <div className="min-h-screen flex items-center justify-center font-plus-jakarta bg-[#FAF6F3] p-4 sm:p-8">
+      <div className="w-full max-w-5xl flex bg-[#FDF8F3] rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(92,64,51,0.2)] overflow-hidden">
+
+        {/* ── LEFT SIDE ── */}
+        <div className="hidden lg:flex lg:w-[45%] relative bg-[#4A3225] flex-shrink-0">
+          <div className="absolute inset-0">
+            <Image
+              src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=1200"
+              alt="Patient"
+              fill
+              className="object-cover opacity-85"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/95 via-[#3E2723]/40 to-[#3E2723]/50" />
+          </div>
+          <div className="relative z-10 flex flex-col justify-between p-10 w-full h-full text-white min-h-[620px]">
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-3">
+              <div className="w-12 h-12 flex items-center justify-center text-[#FFD8C2]">
+                <Heart size={38} className="stroke-[1.5]" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-serif italic text-[#FFD8C2]">Your Health</h2>
+                <h3 className="text-4xl font-black tracking-tight">Matters</h3>
+              </div>
+              <p className="text-sm text-white/80 leading-relaxed pt-1 max-w-[200px]">Track. Stay Informed.<br />Feel Better.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center justify-center bg-white/20 p-1.5 rounded-lg backdrop-blur-sm">
+                  <ShieldCheck size={18} className="text-[#FFD8C2]" />
+                </div>
+                <span className="text-base font-black tracking-widest uppercase">ONCURA</span>
+              </div>
+              <p className="text-[11px] font-medium text-white/60">Better Insights. Healthier Tomorrow.</p>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* ── RIGHT SIDE (FORM) ── */}
+        <div className="w-full lg:w-[55%] flex flex-col justify-center items-center p-8 lg:p-12 overflow-y-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm space-y-5">
+            <div className="space-y-3">
+              <div className="w-11 h-11 rounded-full bg-[#EADECF] flex items-center justify-center text-[#5C4033]">
+                <User size={22} />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-[#3E2723] tracking-tight">
+                  Patient <span className="text-[#8D6E63]">Sign Up</span>
+                </h1>
+                <p className="text-[#6D4C41] text-xs mt-1">Create your account to get started.</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
+              {/* Name */}
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><User size={15} /></div>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Full Name" className={inputCls} required />
+              </div>
+
+              {/* Age */}
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><Calendar size={15} /></div>
+                <input type="number" value={age} onChange={e => setAge(e.target.value)} placeholder="Age" className={inputCls} min="1" max="120" required />
+              </div>
+
+              {/* Email */}
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><Mail size={15} /></div>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email address" className={inputCls} required />
+              </div>
+
+              {/* Password */}
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><Lock size={15} /></div>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className={inputCls} required />
+                <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8D6E63]"><EyeOff size={14} /></button>
+              </div>
+
+              {/* Blood Group */}
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] pointer-events-none"><Droplets size={15} /></div>
+                <select value={bloodGroup} onChange={e => setBloodGroup(e.target.value)} className={selectCls} required>
+                  <option value="">Blood Group</option>
+                  <option>A+</option><option>A-</option>
+                  <option>B+</option><option>B-</option>
+                  <option>AB+</option><option>AB-</option>
+                  <option>O+</option><option>O-</option>
+                </select>
+              </div>
+
+              {/* Disability / Pre-existing Disease */}
+              <div className="relative group">
+                <div className="absolute left-4 top-3.5 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><AlertCircle size={15} /></div>
+                <textarea
+                  value={disability}
+                  onChange={e => setDisability(e.target.value)}
+                  placeholder="Any disability or pre-existing disease? (Optional)"
+                  rows={3}
+                  className="w-full bg-transparent border border-[#D7CCC8] rounded-2xl py-3 pl-11 pr-4 text-xs text-[#3E2723] placeholder:text-[#A1887F] focus:outline-none focus:border-[#8D6E63] focus:ring-1 focus:ring-[#8D6E63]/20 transition-all shadow-sm resize-none"
+                />
+              </div>
+
+              {/* Submit */}
+              <button type="submit" className="w-full bg-[#5C4033] hover:bg-[#4A3225] text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] transition-all flex items-center justify-center gap-2 group mt-1">
+                Create Account <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <div className="relative flex items-center justify-center py-1">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#D7CCC8]" /></div>
+                <span className="relative px-3 bg-[#FDF8F3] text-[9px] font-bold text-[#8D6E63] uppercase tracking-widest">OR</span>
+              </div>
+
+              <button type="button" className="w-full flex items-center justify-center gap-2 border border-[#D7CCC8] hover:bg-white text-[#3E2723] rounded-full py-3 text-xs font-bold shadow-sm transition-all">
+                <Globe size={14} className="text-blue-500" /> Sign Up with Google
+              </button>
+
+              <p className="text-center text-[11px] font-medium text-[#8D6E63] pt-1">
+                Already have an account?{" "}
+                <Link href="/login?role=patient" className="font-bold text-[#5C4033] hover:text-[#3E2723] transition-colors">Sign In</Link>
+              </p>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN CONTENT ─────────────────────────────────────────────────────────────
 function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login: setLogin } = useAuthStore();
   const role = searchParams.get("role") || "patient";
-  
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  
-  // Doctor specific fields
-  const [age, setAge] = useState("");
-  const [degree, setDegree] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const [licenseNumber, setLicenseNumber] = useState("");
-  const [profilePic, setProfilePic] = useState<File | null>(null);
-  const [cnicFront, setCnicFront] = useState<File | null>(null);
-  const [cnicBack, setCnicBack] = useState<File | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const cnicFrontRef = useRef<HTMLInputElement>(null);
-  const cnicBackRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulation of account creation and login
     setLogin({
-      name: name || (role === "doctor" ? "Dr. Saeed" : "Uzair Ahmad"),
+      name: role === "doctor" ? "Dr. New Doctor" : "New Patient",
       role: role as "patient" | "doctor",
-      email: email
+      email: ""
     });
-
-    if (role === "patient") {
-      router.push("/onboarding");
-    } else {
-      router.push("/doctor"); // Doctors go straight to portal
-    }
+    router.push(role === "doctor" ? "/doctor" : "/onboarding");
   };
 
-  return (
-    <div className="min-h-screen pt-32 pb-20 px-6 flex flex-col items-center justify-center relative overflow-hidden bg-slate-950">
-      {/* Background Ambient Glows */}
-      <div className="absolute -top-20 -right-20 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute -bottom-20 -left-20 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none" />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className={cn("w-full z-10", role === "doctor" ? "max-w-2xl" : "max-w-md")}
-      >
-        <div className="text-center mb-6">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500 mb-4"
-          >
-            {role === "doctor" ? <Stethoscope size={20} /> : <Activity size={20} />}
-          </motion.div>
-          <h1 className="text-2xl font-black text-white tracking-tight font-plus-jakarta mb-1.5">
-            {role === "doctor" ? "Doctor Registration" : "Patient Registration"}
-          </h1>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">
-            Join the clinical AI revolution
-          </p>
-        </div>
-
-        <GlassCard className="p-7 border-white/5 bg-slate-950/40 backdrop-blur-2xl relative overflow-hidden">
-           {/* Decorative Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-
-          <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
-            <div className={cn("grid grid-cols-1 gap-6", role === "doctor" && "md:grid-cols-2")}>
-              {/* Basic Info */}
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                    Full Legal Name
-                  </label>
-                  <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                      <User size={14} />
-                    </div>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder={role === "doctor" ? "Dr. Full Name" : "Enter your name"}
-                      className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                    Clinical Email
-                  </label>
-                  <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                      <Mail size={14} />
-                    </div>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder={role === "doctor" ? "clinical@hospital.com" : "Enter your mail"}
-                      className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                    Access Password
-                  </label>
-                  <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                      <Lock size={14} />
-                    </div>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {role === "doctor" && (
-                  <>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                        Professional Age
-                      </label>
-                      <div className="relative group">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                          <Calendar size={14} />
-                        </div>
-                        <input
-                          type="number"
-                          value={age}
-                          onChange={(e) => setAge(e.target.value)}
-                          placeholder="Years"
-                          className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Doctor Specific Professional Info */}
-              {role === "doctor" ? (
-                <div className="space-y-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                      Medical Degree
-                    </label>
-                    <div className="relative group">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                        <Award size={14} />
-                      </div>
-                      <input
-                        type="text"
-                        value={degree}
-                        onChange={(e) => setDegree(e.target.value)}
-                        placeholder="e.g. MBBS, MD"
-                        className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                      Specialization <span className="opacity-40">(Optional)</span>
-                    </label>
-                    <div className="relative group">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                        <Stethoscope size={14} />
-                      </div>
-                      <input
-                        type="text"
-                        value={specialization}
-                        onChange={(e) => setSpecialization(e.target.value)}
-                        placeholder="e.g. Dermatologist"
-                        className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                      License Number
-                    </label>
-                    <div className="relative group">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                        <Hash size={14} />
-                      </div>
-                      <input
-                        type="text"
-                        value={licenseNumber}
-                        onChange={(e) => setLicenseNumber(e.target.value)}
-                        placeholder="PMDC / State License"
-                        className="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  {/* Profile Pic Upload */}
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                      Profile Picture
-                    </label>
-                    <div 
-                      onClick={() => fileInputRef.current?.click()}
-                      className={cn(
-                        "w-full bg-slate-900/30 border border-dashed border-white/10 rounded-xl py-2 px-4 flex items-center gap-3 cursor-pointer hover:bg-slate-800/50 hover:border-blue-500/30 transition-all group",
-                        profilePic && "border-emerald-500/30 bg-emerald-500/5"
-                      )}
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
-                        {profilePic ? <CheckCircle2 size={16} className="text-emerald-500" /> : <Camera size={16} />}
-                      </div>
-                      <span className="text-[10px] font-bold text-slate-500 uppercase truncate">
-                        {profilePic ? profilePic.name : "Upload Photo"}
-                      </span>
-                      <input 
-                        type="file" 
-                        ref={fileInputRef} 
-                        className="hidden" 
-                        accept="image/*"
-                        onChange={(e) => setProfilePic(e.target.files?.[0] || null)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            {/* Documents Upload (Doctor Only) */}
-            {role === "doctor" && (
-              <div className="space-y-3 pt-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                  Identity Verification (CNIC)
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <div 
-                    onClick={() => cnicFrontRef.current?.click()}
-                    className={cn(
-                      "flex flex-col items-center justify-center p-4 rounded-xl border border-dashed border-white/10 bg-slate-900/30 hover:bg-slate-800/50 transition-all cursor-pointer group",
-                      cnicFront && "border-emerald-500/30 bg-emerald-500/5"
-                    )}
-                  >
-                    <Upload size={16} className={cn("mb-2 transition-colors", cnicFront ? "text-emerald-500" : "text-slate-600 group-hover:text-blue-500")} />
-                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 text-center truncate w-full">
-                      {cnicFront ? cnicFront.name : "Front Side"}
-                    </span>
-                    <input type="file" ref={cnicFrontRef} className="hidden" accept="image/*" onChange={(e) => setCnicFront(e.target.files?.[0] || null)} />
-                  </div>
-                  <div 
-                    onClick={() => cnicBackRef.current?.click()}
-                    className={cn(
-                      "flex flex-col items-center justify-center p-4 rounded-xl border border-dashed border-white/10 bg-slate-900/30 hover:bg-slate-800/50 transition-all cursor-pointer group",
-                      cnicBack && "border-emerald-500/30 bg-emerald-500/5"
-                    )}
-                  >
-                    <Upload size={16} className={cn("mb-2 transition-colors", cnicBack ? "text-emerald-500" : "text-slate-600 group-hover:text-blue-500")} />
-                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 text-center truncate w-full">
-                      {cnicBack ? cnicBack.name : "Back Side"}
-                    </span>
-                    <input type="file" ref={cnicBackRef} className="hidden" accept="image/*" onChange={(e) => setCnicBack(e.target.files?.[0] || null)} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="flex items-start gap-3 py-1">
-              <div className="mt-1">
-                <CheckCircle2 size={12} className="text-blue-500" />
-              </div>
-              <p className="text-[8px] text-slate-500 leading-relaxed font-medium uppercase tracking-tight">
-                By initializing your account, you agree to the <span className="text-slate-300">Clinical Protocol</span> and <span className="text-slate-300">Data Processing Terms</span>.
-              </p>
-            </div>
-
-            <PremiumButton glow type="submit" className="w-full py-3">
-              {role === "doctor" ? "Verify & Create ID" : "Create Clinical ID"} <ArrowRight size={14} className="ml-1" />
-            </PremiumButton>
-          </form>
-
-          <div className="mt-8 relative z-10">
-            <div className="relative flex items-center justify-center mb-4">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/5"></div>
-              </div>
-              <span className="relative px-4 bg-slate-950 text-[8px] font-bold text-slate-600 uppercase tracking-widest">
-                Trusted Provider Connect
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/5 bg-slate-900/30 hover:bg-slate-800/40 transition-colors text-[10px] font-bold text-white uppercase tracking-wider">
-                <Globe size={14} /> Google
-              </button>
-              <button className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/5 bg-slate-900/30 hover:bg-slate-800/40 transition-colors text-[10px] font-bold text-white uppercase tracking-wider">
-                <Globe size={14} /> Apple ID
-              </button>
-            </div>
-          </div>
-        </GlassCard>
-
-        <p className="text-center mt-8 text-[11px] text-slate-500 font-medium">
-          Already have an ID?{" "}
-          <Link href={`/login?role=${role}`} className="text-blue-500 hover:text-blue-400 font-bold">
-            Sign in to Portal
-          </Link>
-        </p>
-      </motion.div>
-    </div>
-  );
+  if (role === "doctor") return <DoctorSignup handleSubmit={handleSubmit} />;
+  return <PatientSignup handleSubmit={handleSubmit} />;
 }
 
 export default function SignupPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-black tracking-widest">LOADING...</div>}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#FAF6F3] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[#5C4033] border-t-transparent animate-spin" />
+      </div>
+    }>
       <SignupContent />
     </Suspense>
   );
 }
+

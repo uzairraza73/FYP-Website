@@ -1,164 +1,111 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useAppointmentStore } from "@/store/useAppointmentStore";
-import { GlassCard } from "@/components/GlassCard";
-import { 
-  Calendar, Clock, User, 
-  Filter, Search,
-  AlertCircle
-} from "lucide-react";
-import { useSettingsStore } from "@/store/useSettingsStore";
-import { cn } from "@/utils/cn";
+import { DoctorLayout } from "@/components/doctor/DoctorLayout";
+import { mockPatients } from "@/data/doctorData";
+import { Calendar, Clock, User, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
-const translations = {
-  English: {
-    protocol: "Schedule Protocol",
-    upcoming: "Upcoming Meetings",
-    search: "Search Patient...",
-    noApts: "No Appointments Found",
-    clear: "The clinical schedule is currently clear",
-    confirmed: "Confirmed",
-    specialist: "Assigned Specialist",
-    start: "Start Session"
-  },
-  Urdu: {
-    protocol: "شیڈول پروٹوکول",
-    upcoming: "آنے والی ملاقاتیں",
-    search: "مریض تلاش کریں...",
-    noApts: "کوئی ملاقات نہیں ملی",
-    clear: "کلینیکل شیڈول فی الحال صاف ہے",
-    confirmed: "تصدیق شدہ",
-    specialist: "مقرر کردہ ماہر",
-    start: "سیشن شروع کریں"
-  }
+// Flatten all appointments with patient info
+const allMeetings = mockPatients.flatMap(p =>
+  p.appointments.map(a => ({
+    ...a,
+    patientName: p.name,
+    patientAge: p.age,
+    patientGender: p.gender,
+  }))
+).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+const upcoming = allMeetings.filter(m => m.status === "Upcoming");
+const past = allMeetings.filter(m => m.status !== "Upcoming");
+
+const TYPE_COLORS: Record<string, string> = {
+  "Consultation": "bg-blue-50 text-blue-700 border-blue-200",
+  "Check-up":     "bg-emerald-50 text-emerald-700 border-emerald-200",
+  "Biopsy":       "bg-red-50 text-red-700 border-red-200",
 };
 
-export default function DoctorSchedulePage() {
-  const appointments = useAppointmentStore((state) => state.appointments);
-  const { theme, language } = useSettingsStore();
-  const t = translations[language];
-  
+export default function SchedulePage() {
   return (
-    <div className={cn(
-      "min-h-screen transition-colors duration-500 selection:bg-blue-500/30",
-      theme === 'dark' ? "bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
-    )}>
-      {/* Background Decorative Elements */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
-        <div className={cn("absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full blur-[120px]", 
-          theme === 'dark' ? "bg-blue-600/10" : "bg-blue-200/20")} />
-        <div className={cn("absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full blur-[120px]", 
-          theme === 'dark' ? "bg-indigo-600/10" : "bg-indigo-200/20")} />
-      </div>
+    <DoctorLayout>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="space-y-8 max-w-4xl">
+        <div>
+          <h1 className="text-2xl font-black text-[#3E2723]">Meeting Schedule</h1>
+          <p className="text-sm text-[#6D4C41] mt-1">Your upcoming and past appointments with patients.</p>
+        </div>
 
-      <div className="relative z-10 flex flex-col h-screen pt-24">
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-          <div className="max-w-5xl mx-auto">
-            <div className={cn("flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6", 
-              language === 'Urdu' && "md:flex-row-reverse")}>
-              <div className={cn(language === 'Urdu' && "text-right")}>
-                <div className={cn("flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-3", 
-                  language === 'Urdu' && "flex-row-reverse")}>
-                  <Calendar size={14} /> {t.protocol}
-                </div>
-                <h2 className="text-4xl font-black tracking-tighter font-plus-jakarta">
-                  {t.upcoming.split(' ')[0]} <span className="text-blue-500">{t.upcoming.split(' ')[1]}</span>
-                </h2>
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4">
+          {[
+            { label: "Upcoming", value: upcoming.length, icon: AlertCircle, color: "text-blue-600", bg: "bg-blue-50" },
+            { label: "Completed", value: allMeetings.filter(m=>m.status==="Completed").length, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
+            { label: "Cancelled", value: allMeetings.filter(m=>m.status==="Cancelled").length, icon: XCircle, color: "text-red-500", bg: "bg-red-50" },
+          ].map(({ label, value, icon: Icon, color, bg }) => (
+            <div key={label} className="bg-white/60 backdrop-blur-sm border border-white/70 rounded-2xl p-5 shadow-sm">
+              <div className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center mb-3`}>
+                <Icon size={18} className={color} />
               </div>
+              <p className="text-2xl font-black text-[#3E2723]">{value}</p>
+              <p className="text-[10px] font-bold text-[#8D6E63] uppercase tracking-wider">{label}</p>
+            </div>
+          ))}
+        </div>
 
-              <div className={cn("flex items-center gap-3", language === 'Urdu' && "flex-row-reverse")}>
-                <div className="relative group">
-                  <Search size={14} className={cn("absolute top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors", 
-                    language === 'Urdu' ? "right-4" : "left-4")} />
-                  <input 
-                    type="text" 
-                    placeholder={t.search} 
-                    className={cn(
-                      "border rounded-xl py-2.5 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:border-blue-500/50 w-64 transition-all",
-                      theme === 'dark' ? "bg-slate-900/50 border-white/5 text-white placeholder:text-slate-700" : "bg-white border-slate-200 text-slate-900 placeholder:text-slate-400",
-                      language === 'Urdu' ? "pr-11 pl-4 text-right" : "pl-11 pr-4"
-                    )}
-                  />
+        {/* Upcoming Appointments */}
+        <div>
+          <h2 className="text-sm font-black uppercase tracking-widest text-[#8D6E63] mb-4">Upcoming Appointments</h2>
+          {upcoming.length === 0 ? (
+            <div className="bg-white/60 border border-white/70 rounded-2xl p-8 text-center">
+              <Calendar size={32} className="text-[#D7CCC8] mx-auto mb-2" />
+              <p className="text-sm text-[#A1887F]">No upcoming appointments</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {upcoming.map(m => (
+                <div key={m.id} className="bg-white/70 backdrop-blur-sm border border-white/70 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-2xl bg-[#F0E8DF] flex items-center justify-center text-[#5C4033] flex-shrink-0">
+                    <Calendar size={22} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${TYPE_COLORS[m.type] ?? "bg-[#F0E8DF] text-[#5C4033]"}`}>{m.type}</span>
+                    </div>
+                    <p className="text-sm font-black text-[#3E2723]">{m.patientName}</p>
+                    <p className="text-[10px] text-[#8D6E63]">{m.patientAge} yrs · {m.patientGender}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center gap-1 justify-end text-xs font-bold text-[#3E2723]">
+                      <Calendar size={12} className="text-[#8D6E63]" /> {m.date}
+                    </div>
+                    <div className="flex items-center gap-1 justify-end text-[10px] text-[#8D6E63] mt-0.5">
+                      <Clock size={11} /> {m.time}
+                    </div>
+                  </div>
+                  <div className="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
                 </div>
-                <button className={cn("p-2.5 rounded-xl border transition-colors", 
-                  theme === 'dark' ? "bg-slate-900/50 border-white/5 text-slate-400 hover:text-white" : "bg-white border-slate-200 text-slate-500 hover:text-blue-600")}>
-                  <Filter size={18} />
-                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Past Appointments */}
+        <div>
+          <h2 className="text-sm font-black uppercase tracking-widest text-[#8D6E63] mb-4">Past Appointments</h2>
+          <div className="space-y-3">
+            {past.map(m => (
+              <div key={m.id} className="bg-white/40 border border-white/50 rounded-2xl p-4 flex items-center gap-4 opacity-80">
+                <div className="w-10 h-10 rounded-xl bg-[#F0E8DF] flex items-center justify-center text-[#A1887F] flex-shrink-0">
+                  <User size={18} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-[#5C4033]">{m.patientName} — {m.type}</p>
+                  <p className="text-[10px] text-[#A1887F]">{m.date} at {m.time}</p>
+                </div>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${m.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>{m.status}</span>
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4">
-              {appointments.length === 0 ? (
-                <GlassCard className="py-24 flex flex-col items-center justify-center text-center">
-                   <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mb-6", 
-                     theme === 'dark' ? "bg-slate-800/50 text-slate-600" : "bg-slate-100 text-slate-400")}>
-                      <Clock size={32} />
-                   </div>
-                   <h3 className={cn("text-lg font-black uppercase tracking-tight", theme === 'dark' ? "text-white" : "text-slate-900")}>
-                     {t.noApts}
-                   </h3>
-                   <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-2">
-                     {t.clear}
-                   </p>
-                </GlassCard>
-              ) : (
-                appointments.map((apt, idx) => (
-                  <motion.div
-                    key={apt.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                  >
-                    <GlassCard className="p-6 transition-all group">
-                      <div className={cn("flex flex-col md:flex-row md:items-center gap-8", 
-                        language === 'Urdu' && "md:flex-row-reverse")}>
-                        <div className={cn("flex items-center gap-5 flex-1", language === 'Urdu' && "flex-row-reverse text-right")}>
-                          <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                            <User size={24} />
-                          </div>
-                          <div>
-                            <div className={cn("flex items-center gap-3 mb-1", language === 'Urdu' && "flex-row-reverse")}>
-                               <h3 className={cn("text-lg font-black tracking-tight", theme === 'dark' ? "text-white" : "text-slate-900")}>{apt.patientName}</h3>
-                               <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase tracking-widest border border-emerald-500/20">
-                                 {t.confirmed}
-                               </span>
-                            </div>
-                            <div className={cn("flex items-center gap-4 text-[9px] font-bold text-slate-500 uppercase tracking-widest", 
-                              language === 'Urdu' && "flex-row-reverse")}>
-                               <span className="flex items-center gap-1.5"><Calendar size={12} className="text-blue-500" /> {apt.day}, {apt.date}</span>
-                               <span className="flex items-center gap-1.5"><Clock size={12} className="text-blue-500" /> {apt.time}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className={cn("flex items-center gap-4 md:border-l border-white/5 md:pl-8", 
-                          language === 'Urdu' && "md:border-l-0 md:border-r md:pr-8 md:pl-0 flex-row-reverse")}>
-                           <div className={cn("hidden md:block", language === 'Urdu' ? "text-left" : "text-right")}>
-                              <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">{t.specialist}</p>
-                              <p className={cn("text-[10px] font-black uppercase tracking-tight", theme === 'dark' ? "text-white" : "text-slate-900")}>{apt.doctorName}</p>
-                           </div>
-                           <div className="h-10 w-px bg-white/5 mx-2 hidden md:block" />
-                           <div className={cn("flex gap-2", language === 'Urdu' && "flex-row-reverse")}>
-                             <button className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20">
-                               {t.start}
-                             </button>
-                             <button className={cn("p-2.5 rounded-xl border transition-colors", 
-                               theme === 'dark' ? "bg-slate-900 border-white/5 text-slate-400 hover:text-white" : "bg-slate-100 border-slate-200 text-slate-500 hover:text-blue-600")}>
-                               <AlertCircle size={16} />
-                             </button>
-                           </div>
-                        </div>
-                      </div>
-                    </GlassCard>
-                  </motion.div>
-                ))
-              )}
-            </div>
+            ))}
           </div>
-        </main>
-      </div>
-    </div>
+        </div>
+      </motion.div>
+    </DoctorLayout>
   );
 }

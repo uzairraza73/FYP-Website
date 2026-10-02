@@ -5,88 +5,46 @@ import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
-  Stethoscope,
-  User,
   ArrowRight,
   ShieldCheck,
-  HeartPulse,
-  ClipboardList,
-  BarChart2,
-  Bell,
+  Stethoscope,
+  Heart
 } from "lucide-react";
-
-const DOCTOR_FEATURES = [
-  { icon: ClipboardList, label: "Manage patient records" },
-  { icon: BarChart2, label: "AI scan insights & reports" },
-  { icon: Bell, label: "Real-time clinical alerts" },
-];
-
-const PATIENT_FEATURES = [
-  { icon: HeartPulse, label: "View your scan reports" },
-  { icon: BarChart2, label: "Track health progress" },
-  { icon: ShieldCheck, label: "Stay informed & safe" },
-];
 
 function RoleSelectionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const mode = searchParams.get("mode") || "login"; // login | signup
+  const mode = searchParams.get("mode") || "login";
 
   const handleSelect = (role: "doctor" | "patient") => {
     router.push(`/${mode}?role=${role}`);
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF5F0] font-plus-jakarta flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden">
-      {/* Decorative ambient glows */}
-      <motion.div
-        animate={{ y: [0, -30, 0], scale: [1, 1.2, 1] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[-15%] right-[-10%] w-[50vw] h-[50vw] rounded-full blur-[130px] bg-[#E76F51]/10 pointer-events-none"
-      />
-      <motion.div
-        animate={{ y: [0, 40, 0], scale: [1, 1.15, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-[-15%] left-[-10%] w-[50vw] h-[50vw] rounded-full blur-[130px] bg-[#5C4033]/8 pointer-events-none"
-      />
+    <div className="min-h-screen font-plus-jakarta flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden bg-[#EFEBE4]">
+      {/* Background Image blended */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
+          alt="Background" 
+          fill 
+          className="object-cover opacity-30 mix-blend-multiply blur-xl"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F7EFE9]/80 to-[#EADECF]/90" />
+      </div>
 
-      {/* Subtle mesh grid */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.025]"
-        style={{
-          backgroundImage:
-            "linear-gradient(#3E2723 1px,transparent 1px),linear-gradient(90deg,#3E2723 1px,transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Header label */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center gap-3 mb-6"
-      >
-        <div className="h-px w-12 bg-[#E76F51]/40" />
-        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#E76F51]">
-          Choose Your Dashboard
-        </span>
-        <div className="h-px w-12 bg-[#E76F51]/40" />
-      </motion.div>
-
-      {/* Title */}
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1 }}
-        className="text-center mb-4"
+        className="text-center mb-8 relative z-10"
       >
-        <h1 className="text-4xl md:text-5xl font-black text-[#111827] tracking-tight mb-3">
-          Welcome to{" "}
-          <span className="text-[#E76F51]">Oncura</span>
+        <h1 className="text-3xl md:text-4xl font-black text-[#3E2723] tracking-tight mb-2">
+          Welcome to ONCURA
         </h1>
-        <p className="text-sm text-slate-500 font-medium">
-          Access your personalized dashboard based on your role.
+        <p className="text-sm text-[#6D4C41] font-medium">
+          Choose your account type to proceed.
         </p>
       </motion.div>
 
@@ -95,16 +53,16 @@ function RoleSelectionContent() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="flex items-center gap-1 bg-white border border-[#FFD8C2] rounded-full p-1 mb-12 shadow-sm"
+        className="flex items-center gap-1 bg-[#FDF8F3] border border-[#D7CCC8] rounded-full p-1 mb-12 shadow-sm relative z-10"
       >
         {(["login", "signup"] as const).map((m) => (
           <button
             key={m}
             onClick={() => router.push(`/auth/role-selection?mode=${m}`)}
-            className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${
+            className={`px-8 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 ${
               mode === m
-                ? "bg-[#3E2723] text-white shadow-md"
-                : "text-[#5C4033]/70 hover:text-[#3E2723]"
+                ? "bg-[#5C4033] text-white shadow-md"
+                : "text-[#8D6E63] hover:text-[#5C4033]"
             }`}
           >
             {m === "login" ? "Sign In" : "Sign Up"}
@@ -112,169 +70,100 @@ function RoleSelectionContent() {
         ))}
       </motion.div>
 
-      {/* Role Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-3xl">
-        {/* ── Doctor Card ── */}
+      {/* Role Cards Container */}
+      <div className="flex flex-col md:flex-row gap-8 w-full max-w-5xl relative z-10">
+        
+        {/* ── DOCTOR CARD ── */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3, type: "spring", stiffness: 280, damping: 22 }}
-          whileHover={{ y: -8, scale: 1.02 }}
+          whileHover={{ y: -5 }}
           onClick={() => handleSelect("doctor")}
-          className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-gradient-to-br from-[#3E2723] to-[#5C4033] shadow-[0_25px_60px_rgba(62,39,35,0.35)] min-h-[360px] flex flex-col"
+          className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-[#FDF8F3] shadow-[0_15px_40px_rgba(92,64,51,0.1)] w-full min-h-[380px] md:h-[420px] flex flex-col justify-end p-8 border border-white/50 hover:shadow-[0_20px_50px_rgba(92,64,51,0.2)] transition-all duration-300"
         >
-          {/* Blurred full-card background — doctor photo fills top half */}
-          <div className="absolute inset-0 z-0">
+          {/* Doctor Image Blob (Left) */}
+          <div 
+            className="absolute top-0 left-0 bottom-0 w-3/5 lg:w-1/2 pointer-events-none transition-transform duration-700 group-hover:scale-105"
+            style={{ 
+              clipPath: "ellipse(85% 65% at 15% 45%)",
+              background: "#D7CCC8" 
+            }}
+          >
             <Image
               src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=600&h=800"
               alt="Doctor"
               fill
-              className="object-cover object-top opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-1000"
+              className="object-cover object-top opacity-95 transition-all duration-500"
             />
-            {/* Dark gradient overlay — fades photo into dark card at bottom */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#3E2723]/30 via-[#3E2723]/70 to-[#3E2723]" />
-            <div className="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/10" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(231,111,81,0.12),transparent_60%)]" />
+            {/* Soft warm tint overlay */}
+            <div className="absolute inset-0 bg-[#5C4033]/10 mix-blend-overlay" />
           </div>
 
-          {/* Doctor photo circular badge */}
-          <div className="relative z-10 flex justify-center pt-10 mb-2">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-[#E76F51]/30 blur-xl scale-150 animate-pulse" />
-              <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-white/30 shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
-                <Image
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200"
-                  alt="Doctor"
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              {/* Online badge */}
-              <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#3E2723] shadow-md" />
+          {/* Card Content (Right Side Aligned) */}
+          <div className="relative z-10 w-1/2 ml-auto flex flex-col items-center pt-4 pb-12">
+            <div className="w-16 h-16 rounded-full border-2 border-[#8D6E63] flex items-center justify-center text-[#5C4033] mb-4 bg-[#FDF8F3]/50 backdrop-blur-sm">
+               <Stethoscope size={28} />
             </div>
+            <h2 className="text-2xl lg:text-3xl font-black text-[#3E2723] leading-tight">Doctor</h2>
+            <h3 className="text-xl lg:text-2xl font-normal text-[#6D4C41] leading-tight">Dashboard</h3>
+            <div className="w-8 h-1 bg-[#D7CCC8] mt-4 rounded-full" />
           </div>
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col flex-1 px-8 pb-8 pt-4 text-white">
-            <h2 className="text-2xl font-black tracking-tight mb-2 text-center">
-              Doctor Dashboard
-            </h2>
-            <p className="text-sm text-white/70 font-medium text-center mb-6 leading-relaxed">
-              Access patient data, AI insights, manage<br />
-              reports and provide better care.
-            </p>
-
-            {/* Features */}
-            <div className="space-y-2.5 mb-8 flex-1">
-              {DOCTOR_FEATURES.map((f, i) => {
-                const Icon = f.icon;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -15 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + i * 0.1 }}
-                    className="flex items-center gap-3 bg-white/8 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5"
-                  >
-                    <Icon size={14} className="text-[#FFD8C2] shrink-0" />
-                    <span className="text-[11px] font-bold text-white/90 uppercase tracking-wider">{f.label}</span>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* CTA */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full py-3.5 bg-white/15 backdrop-blur-md border border-white/25 rounded-[1rem] text-[11px] font-black uppercase tracking-widest text-white flex items-center justify-center gap-2 hover:bg-white/25 transition-all shadow-md"
-            >
-              Continue as Doctor <ArrowRight size={15} />
-            </motion.button>
+          {/* Button */}
+          <div className="relative z-10 w-full mt-auto">
+            <button className="w-full max-w-[280px] mx-auto py-3.5 bg-gradient-to-r from-[#5C4033] to-[#795548] text-white rounded-full text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-[#5C4033]/30 group-hover:shadow-[#5C4033]/50 transition-all">
+              Continue as Doctor <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </motion.div>
 
-        {/* ── Patient Card ── */}
+
+        {/* ── PATIENT CARD ── */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.42, type: "spring", stiffness: 280, damping: 22 }}
-          whileHover={{ y: -8, scale: 1.02 }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4, type: "spring", stiffness: 280, damping: 22 }}
+          whileHover={{ y: -5 }}
           onClick={() => handleSelect("patient")}
-          className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-white shadow-[0_25px_60px_rgba(92,64,51,0.14)] border border-[#FFD8C2]/80 min-h-[360px] flex flex-col"
+          className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-[#FDF8F3] shadow-[0_15px_40px_rgba(92,64,51,0.1)] w-full min-h-[380px] md:h-[420px] flex flex-col justify-end p-8 border border-white/50 hover:shadow-[0_20px_50px_rgba(92,64,51,0.2)] transition-all duration-300"
         >
-          {/* Patient photo fills top of card */}
-          <div className="absolute inset-0 z-0">
+          {/* Patient Image Blob (Right) */}
+          <div 
+            className="absolute top-0 right-0 bottom-0 w-3/5 lg:w-1/2 pointer-events-none transition-transform duration-700 group-hover:scale-105"
+            style={{ 
+              clipPath: "ellipse(85% 65% at 85% 45%)",
+              background: "#D7CCC8" 
+            }}
+          >
             <Image
-              src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=600&h=800"
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600&h=800"
               alt="Patient"
               fill
-              className="object-cover object-top opacity-30 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000"
+              className="object-cover object-top opacity-95 transition-all duration-500"
             />
-            {/* Warm frosted overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-[#FFF5F0]/80 to-[#FFF5F0]" />
-            <div className="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/80" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(231,111,81,0.07),transparent_60%)]" />
+            {/* Soft warm tint overlay */}
+            <div className="absolute inset-0 bg-[#5C4033]/10 mix-blend-overlay" />
           </div>
 
-          {/* Patient photo circular badge */}
-          <div className="relative z-10 flex justify-center pt-10 mb-2">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-[#E76F51]/15 blur-xl scale-150 animate-pulse" />
-              <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-[#FFD8C2] shadow-[0_15px_40px_rgba(231,111,81,0.25)]">
-                <Image
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200&h=200"
-                  alt="Patient"
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              {/* Verified badge */}
-              <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-[#E76F51] border-2 border-white shadow-md flex items-center justify-center">
-                <svg viewBox="0 0 10 10" className="w-2.5 h-2.5 fill-white"><path d="M8.5 2L4 7.5 1.5 5" stroke="white" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
+          {/* Card Content (Left Side Aligned) */}
+          <div className="relative z-10 w-1/2 mr-auto flex flex-col items-center pt-4 pb-12">
+            <div className="w-16 h-16 rounded-full border-2 border-[#8D6E63] flex items-center justify-center text-[#5C4033] mb-4 bg-[#FDF8F3]/50 backdrop-blur-sm relative">
+               <Heart size={28} />
             </div>
+            <h2 className="text-2xl lg:text-3xl font-black text-[#3E2723] leading-tight">Patient</h2>
+            <h3 className="text-xl lg:text-2xl font-normal text-[#6D4C41] leading-tight">Dashboard</h3>
+            <div className="w-8 h-1 bg-[#D7CCC8] mt-4 rounded-full" />
           </div>
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col flex-1 px-8 pb-8 pt-4">
-            <h2 className="text-2xl font-black tracking-tight mb-2 text-center text-[#3E2723]">
-              Patient Dashboard
-            </h2>
-            <p className="text-sm text-slate-500 font-medium text-center mb-6 leading-relaxed">
-              View your reports, track your health,<br />
-              and get personalized insights.
-            </p>
-
-            {/* Features */}
-            <div className="space-y-2.5 mb-8 flex-1">
-              {PATIENT_FEATURES.map((f, i) => {
-                const Icon = f.icon;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -15 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.62 + i * 0.1 }}
-                    className="flex items-center gap-3 bg-[#FFF5F0] border border-[#FFD8C2]/60 rounded-xl px-4 py-2.5"
-                  >
-                    <Icon size={14} className="text-[#E76F51] shrink-0" />
-                    <span className="text-[11px] font-bold text-[#5C4033] uppercase tracking-wider">{f.label}</span>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* CTA */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full py-3.5 bg-[#E76F51] text-white rounded-[1rem] text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_10px_25px_rgba(231,111,81,0.35)] hover:bg-[#D4603F] transition-all"
-            >
-              Continue as Patient <ArrowRight size={15} />
-            </motion.button>
+          {/* Button */}
+          <div className="relative z-10 w-full mt-auto">
+            <button className="w-full max-w-[280px] mx-auto py-3.5 bg-gradient-to-r from-[#5C4033] to-[#795548] text-white rounded-full text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-[#5C4033]/30 group-hover:shadow-[#5C4033]/50 transition-all">
+              Continue as Patient <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </motion.div>
+
       </div>
 
       {/* Footer note */}
@@ -282,10 +171,10 @@ function RoleSelectionContent() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="mt-10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2"
+        className="mt-12 text-[10px] font-bold text-[#8D6E63] uppercase tracking-widest flex items-center gap-2 relative z-10"
       >
-        <ShieldCheck size={13} className="text-[#E76F51]" />
-        Your data is encrypted and HIPAA-ready
+        <ShieldCheck size={13} className="text-[#5C4033]" />
+        Your data is encrypted and secure
       </motion.p>
     </div>
   );
@@ -295,8 +184,8 @@ export default function RoleSelectionPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FFF5F0] flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full border-2 border-[#E76F51] border-t-transparent animate-spin" />
+        <div className="min-h-screen bg-[#EFEBE4] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full border-2 border-[#5C4033] border-t-transparent animate-spin" />
         </div>
       }
     >
