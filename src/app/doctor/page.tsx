@@ -131,16 +131,14 @@ export default function DoctorPortalPage() {
             </div>
 
             {/* Middle: Doctors with soft organic blob background */}
-            <div className="relative flex-1 flex justify-center items-center h-[240px] w-full max-w-[380px]">
-              {/* Organic blob background behind doctors */}
-              <div className="absolute w-[300px] h-[210px] bg-[#E8DDD0]/70 rounded-[40%_60%_70%_30%/50%_60%_30%_70%]" />
+            <div className="relative flex-1 flex justify-center items-center h-[250px] w-full max-w-[380px]">
               <div className="relative z-10 h-full w-full flex items-end justify-center">
                 <Image
-                  src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=800"
+                  src="/images/doctors-hero.png"
                   alt="Doctors"
-                  width={360}
-                  height={240}
-                  className="object-contain object-bottom h-full"
+                  width={380}
+                  height={250}
+                  className="object-contain object-bottom h-full w-auto"
                   priority
                 />
               </div>

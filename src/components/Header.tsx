@@ -27,11 +27,6 @@ const authedLinks = [
   { href: "/history", label: "History" },
 ];
 
-const doctorLinks = [
-  { href: "/doctor", label: "Patient Directory" },
-  { href: "/doctor/schedule", label: "Schedule" },
-];
-
 export const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
@@ -55,11 +50,11 @@ export const Header = () => {
     router.push("/");
   };
 
-  const isDoctorPortal = pathname.startsWith("/doctor");
+  if (pathname.startsWith("/doctor")) {
+    return null;
+  }
 
-  const activeLinks = isAuthenticated
-    ? isDoctorPortal ? doctorLinks : authedLinks
-    : navLinks;
+  const activeLinks = isAuthenticated ? authedLinks : navLinks;
 
   const translations = {
     English: { patientDir: "Patient Directory", meetingSched: "Meeting Schedule", dashboard: "Dashboard", history: "History", home: "Home", clinicalAi: "Clinical AI", consult: "Consult", signIn: "Sign In", join: "Join", alerts: "Clinical Alerts", clearAll: "Clear All", language: "Language", signOut: "Sign Out" },
