@@ -144,56 +144,6 @@ export const Header = () => {
               </>
             ) : (
               <div className="flex items-center gap-2">
-                {/* Notifications (doctor only) */}
-                {isDoctorPortal && (
-                  <div className="relative">
-                    <motion.button
-                      whileHover={{ scale: 1.08 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => { setShowNotifications(!showNotifications); setShowSettings(false); }}
-                      className="w-9 h-9 rounded-xl bg-[#FFF0E8] border border-[#FFD8C2] text-[#5C4033] hover:border-[#E76F51]/50 flex items-center justify-center relative transition-all duration-200"
-                    >
-                      <Bell size={15} />
-                      <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#E76F51] rounded-full" />
-                    </motion.button>
-
-                    <AnimatePresence>
-                      {showNotifications && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                          transition={{ duration: 0.18 }}
-                          className="absolute top-full right-0 mt-3 w-72 z-[60] bg-white border border-[#FFD8C2]/60 rounded-2xl shadow-[0_20px_40px_rgba(92,64,51,0.12)] p-4"
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#3E2723]">{t.alerts}</h4>
-                            <span className="text-[9px] font-black text-[#E76F51] bg-[#FFF0E8] px-2 py-0.5 rounded-full border border-[#FFD8C2]">3 NEW</span>
-                          </div>
-                          <div className="space-y-3">
-                            {[
-                              { title: "High Risk Scan", msg: "Patient Uzair Ahmad uploaded a high-risk scan.", time: "2m ago", urgent: true },
-                              { title: "Meeting Reminder", msg: "Consultation with Sarah Khan in 15 mins.", time: "10m ago", urgent: false },
-                              { title: "System Update", msg: "AI Model v2.4 successfully deployed.", time: "1h ago", urgent: false },
-                            ].map((n, i) => (
-                              <div key={i} className={cn("text-xs", i < 2 && "pb-3 border-b border-[#FFD8C2]/40")}>
-                                <div className="flex justify-between mb-0.5">
-                                  <p className={cn("font-black text-[10px] uppercase tracking-widest", n.urgent ? "text-[#E76F51]" : "text-[#3E2723]")}>{n.title}</p>
-                                  <span className="text-[9px] text-slate-400 font-medium">{n.time}</span>
-                                </div>
-                                <p className="text-[10px] text-slate-500 font-medium leading-relaxed">{n.msg}</p>
-                              </div>
-                            ))}
-                          </div>
-                          <button className="w-full mt-3 pt-3 border-t border-[#FFD8C2]/40 text-[9px] font-black uppercase tracking-widest text-[#E76F51] hover:text-[#D4603F] transition-colors text-center">
-                            {t.clearAll}
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                )}
-
                 {/* Settings / User Menu */}
                 <div className="relative">
                   <motion.button
