@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { FloatingNav } from "@/components/FloatingNav";
 import { SafetyFooter } from "@/components/SafetyFooter";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const plusJakarta = Plus_Jakarta_Sans({
@@ -29,9 +30,9 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <Header />
-          <main className="flex-grow pt-12 pb-32 md:pb-12">
+          <LayoutWrapper>
             {children}
-          </main>
+          </LayoutWrapper>
           <div className="md:hidden">
             <FloatingNav />
           </div>

@@ -125,7 +125,7 @@ export default function TermsPage() {
           </div>
           <div>
             <h3 className="text-base font-black mb-1">Legal Enquiries</h3>
-            <p className="text-white/70 text-sm font-medium">For questions about these Terms, contact our legal team at <span className="text-[#FFD8C2] font-bold">legal@oncura.ai</span></p>
+            <p className="text-white/70 text-sm font-medium">For questions about these Terms, please <span className="text-[#FFD8C2] font-bold">Contact Us</span></p>
           </div>
         </motion.div>
       </section>

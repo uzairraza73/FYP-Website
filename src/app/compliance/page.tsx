@@ -145,7 +145,7 @@ export default function CompliancePage() {
             </div>
             <div>
               <h3 className="text-base font-black mb-1">Need Compliance Documentation?</h3>
-              <p className="text-white/70 text-sm font-medium">Request our SOC 2 report or BAA at <span className="text-[#FFD8C2] font-bold">compliance@oncura.ai</span></p>
+              <p className="text-white/70 text-sm font-medium">To request our SOC 2 report or BAA, please <span className="text-[#FFD8C2] font-bold">Contact Us</span></p>
             </div>
           </div>
           <button className="flex items-center gap-2 bg-white text-[#3E2723] font-black text-xs uppercase tracking-widest px-5 py-3 rounded-2xl hover:bg-[#FFD8C2] transition-colors shrink-0">

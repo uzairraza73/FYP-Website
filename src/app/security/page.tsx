@@ -148,7 +148,7 @@ export default function SecurityPage() {
           </div>
           <div>
             <h3 className="text-base font-black mb-1">Report a Security Issue</h3>
-            <p className="text-white/70 text-sm font-medium">Found a vulnerability? Contact our security team immediately at <span className="text-[#FFD8C2] font-bold">security@oncura.ai</span></p>
+            <p className="text-white/70 text-sm font-medium">Found a vulnerability? Please <span className="text-[#FFD8C2] font-bold">Contact Us</span> immediately</p>
           </div>
         </motion.div>
       </section>

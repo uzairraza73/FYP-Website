@@ -85,29 +85,12 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4 md:px-6 bg-[#FFF5F0] font-plus-jakarta overflow-hidden flex flex-col relative">
-      {/* Animated Background Ambient Glows */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <motion.div 
-          animate={{ 
-            y: [0, -40, 0], 
-            x: [0, 30, 0], 
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0]
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-[#E76F51]/15" 
-        />
-        <motion.div 
-          animate={{ 
-            y: [0, 50, 0], 
-            x: [0, -40, 0], 
-            scale: [1, 1.3, 1],
-            rotate: [0, -90, 0]
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-[#5C4033]/10" 
-        />
+    <div className="min-h-screen pt-24 pb-12 px-4 md:px-6 bg-[#F0E8DF] font-plus-jakarta overflow-hidden flex flex-col relative">
+      {/* Global Background Blobs */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#D4A98A]/25 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[-10%] left-[10%] w-[400px] h-[400px] bg-[#C69C7B]/15 rounded-full blur-[100px]" />
+        <div className="absolute top-[40%] right-[20%] w-[300px] h-[300px] bg-[#E8D5C4]/35 rounded-full blur-[80px]" />
       </div>
 
       <div className="max-w-4xl mx-auto w-full flex-grow flex flex-col relative z-10">
@@ -130,25 +113,21 @@ export default function ChatPage() {
               transition={{ delay: 0.1, type: "spring", stiffness: 300, damping: 20 }}
               className="relative"
             >
-              <motion.div 
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#3E2723] to-[#5C4033] flex items-center justify-center shadow-lg shadow-[#3E2723]/30"
-              >
-                <Bot size={28} className="text-white" />
-              </motion.div>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-[#FFF5F0] shadow-sm" />
+              <div className="w-14 h-14 rounded-2xl bg-[#E8D5C4] border border-white flex items-center justify-center shadow-sm">
+                <Bot size={28} className="text-[#5C4033]" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-[#F0E8DF] shadow-sm" />
             </motion.div>
             <div>
               <h1 className="text-2xl font-black tracking-tight text-[#3E2723]">
-                CareBot <span className="text-[#E76F51]">AI</span>
+                CareBot <span className="text-[#8D6E63]">AI</span>
               </h1>
               <motion.p 
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center gap-2 mt-0.5"
+                className="text-[10px] text-[#A1887F] font-black uppercase tracking-widest flex items-center gap-2 mt-0.5"
               >
-                <Sparkles size={10} className="text-[#E76F51]" /> Clinical Intelligence v4.0
+                <Sparkles size={10} className="text-[#8D6E63]" /> Clinical Intelligence v4.0
               </motion.p>
             </div>
           </div>
@@ -156,15 +135,15 @@ export default function ChatPage() {
           <div className="hidden md:flex items-center gap-3">
              <motion.div 
                whileHover={{ scale: 1.05 }}
-               className="flex items-center gap-2 px-3 py-2 rounded-full bg-white border border-[#FFD8C2] shadow-[0_5px_15px_rgba(231,111,81,0.05)] text-[9px] font-bold text-[#5C4033] uppercase tracking-widest cursor-default"
+               className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/70 backdrop-blur-sm border border-white/80 shadow-sm text-[9px] font-bold text-[#5C4033] uppercase tracking-widest cursor-default"
              >
-                <ShieldCheck size={12} className="text-[#E76F51]" /> Secure Encryption
+                <ShieldCheck size={12} className="text-[#8D6E63]" /> Secure Encryption
              </motion.div>
              <motion.button 
                whileHover={{ scale: 1.1, rotate: 180 }}
                whileTap={{ scale: 0.9 }}
                onClick={() => setMessages(INITIAL_MESSAGES)}
-               className="p-2.5 rounded-xl bg-white border border-[#FFD8C2] text-slate-500 hover:text-[#E76F51] hover:bg-[#FFF5F0] transition-colors shadow-sm"
+               className="p-2.5 rounded-xl bg-white/70 backdrop-blur-sm border border-white/80 text-[#8D6E63] hover:text-[#5C4033] hover:bg-white transition-colors shadow-sm"
              >
                 <RefreshCcw size={16} />
              </motion.button>
@@ -176,7 +155,7 @@ export default function ChatPage() {
           initial={{ opacity: 0, scale: 0.95, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 25 }}
-          className="flex-grow mb-6 flex flex-col p-0 overflow-hidden bg-white/95 backdrop-blur-xl shadow-[0_30px_80px_rgba(92,64,51,0.12)] border border-[#FFD8C2]/80 rounded-[2rem]"
+          className="flex-grow mb-6 flex flex-col p-0 overflow-hidden bg-white/75 backdrop-blur-xl shadow-[0_30px_80px_rgba(92,64,51,0.08)] border border-white/90 rounded-[2rem]"
         >
           {/* Message List */}
           <div className="flex-grow overflow-y-auto px-6 py-8 space-y-8 no-scrollbar scroll-smooth">
@@ -197,8 +176,8 @@ export default function ChatPage() {
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.1, type: "spring" }}
                     className={cn(
-                      "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-md",
-                      msg.sender === 'user' ? "bg-gradient-to-br from-[#3E2723] to-[#5C4033] text-white" : "bg-gradient-to-br from-[#E76F51] to-[#D4603F] text-white"
+                      "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-white/50",
+                      msg.sender === 'user' ? "bg-[#5C4033] text-white" : "bg-[#E8D5C4] text-[#5C4033]"
                     )}
                   >
                     {msg.sender === 'user' ? <User size={14} /> : <Bot size={14} />}
@@ -207,17 +186,14 @@ export default function ChatPage() {
                   <div className={cn(
                     "max-w-[80%] px-5 py-4 rounded-2xl text-[13px] font-medium leading-relaxed tracking-wide shadow-sm relative overflow-hidden",
                     msg.sender === 'user' 
-                      ? "bg-gradient-to-r from-[#3E2723] to-[#5C4033] text-white rounded-br-none" 
-                      : "bg-gradient-to-br from-[#FFF5F0] to-white text-[#5C4033] border border-[#FFD8C2]/60 rounded-bl-none"
+                      ? "bg-[#8D6E63] text-white rounded-br-none border border-[#5C4033]/20" 
+                      : "bg-[#F5EDE4] text-[#3E2723] border border-white rounded-bl-none"
                   )}>
-                    {/* Glossy reflection for user bubble */}
-                    {msg.sender === 'user' && <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mt-10 -mr-10 pointer-events-none" />}
-                    
                     <span className="relative z-10">{msg.text}</span>
                     
                     <div className={cn(
                       "text-[9px] font-bold uppercase mt-2 relative z-10",
-                      msg.sender === 'user' ? "text-right text-[#FFD8C2]/70" : "text-left text-slate-400"
+                      msg.sender === 'user' ? "text-right text-[#EADBCE]/70" : "text-left text-[#A1887F]"
                     )}>
                       {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
@@ -232,13 +208,13 @@ export default function ChatPage() {
                   exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                   className="flex items-end gap-3"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E76F51] to-[#D4603F] flex items-center justify-center shadow-md">
-                    <Bot size={14} className="text-white" />
+                  <div className="w-8 h-8 rounded-lg bg-[#E8D5C4] flex items-center justify-center shadow-sm border border-white/50">
+                    <Bot size={14} className="text-[#5C4033]" />
                   </div>
-                  <div className="px-6 py-5 rounded-2xl rounded-bl-none flex gap-2 items-center bg-gradient-to-br from-[#FFF5F0] to-white border border-[#FFD8C2]/60 shadow-sm">
-                    <motion.div animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }} transition={{ repeat: Infinity, duration: 1 }} className="w-2 h-2 bg-[#E76F51] rounded-full" />
-                    <motion.div animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="w-2 h-2 bg-[#E76F51] rounded-full" />
-                    <motion.div animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="w-2 h-2 bg-[#E76F51] rounded-full" />
+                  <div className="px-6 py-5 rounded-2xl rounded-bl-none flex gap-2 items-center bg-[#F5EDE4] border border-white shadow-sm">
+                    <motion.div animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }} transition={{ repeat: Infinity, duration: 1 }} className="w-2 h-2 bg-[#8D6E63] rounded-full" />
+                    <motion.div animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="w-2 h-2 bg-[#8D6E63] rounded-full" />
+                    <motion.div animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="w-2 h-2 bg-[#8D6E63] rounded-full" />
                   </div>
                 </motion.div>
               )}
@@ -247,8 +223,8 @@ export default function ChatPage() {
           </div>
 
           {/* Suggestions Bar */}
-          <div className="px-6 py-4 border-t border-[#FFD8C2]/60 flex items-center gap-3 overflow-x-auto no-scrollbar bg-gradient-to-b from-transparent to-slate-50/80">
-            <span className="text-[10px] font-black text-[#5C4033] uppercase tracking-widest shrink-0 mr-2 flex items-center gap-1.5">
+          <div className="px-6 py-4 border-t border-white/50 flex items-center gap-3 overflow-x-auto no-scrollbar bg-gradient-to-b from-transparent to-[#F0E8DF]/30">
+            <span className="text-[10px] font-black text-[#8D6E63] uppercase tracking-widest shrink-0 mr-2 flex items-center gap-1.5">
               <Sparkles size={12} className="text-[#E76F51]" /> Suggestions:
             </span>
             {SUGGESTIONS.map((s, i) => (
@@ -260,7 +236,7 @@ export default function ChatPage() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setInputValue(s)}
-                className="px-4 py-2 rounded-full bg-white border border-[#FFD8C2] text-[10px] font-bold whitespace-nowrap uppercase tracking-widest text-slate-500 hover:text-[#E76F51] hover:border-[#E76F51] hover:bg-[#FFF5F0] hover:shadow-md transition-all"
+                className="px-4 py-2 rounded-full bg-white/70 backdrop-blur-sm border border-white text-[10px] font-bold whitespace-nowrap uppercase tracking-widest text-[#7D5A4F] hover:text-[#3E2723] hover:border-[#D4A98A] hover:bg-white hover:shadow-sm transition-all"
               >
                 {s}
               </motion.button>
@@ -268,10 +244,10 @@ export default function ChatPage() {
           </div>
 
           {/* Input Area */}
-          <div className="p-6 pt-4 bg-slate-50/80 rounded-b-[2rem]">
+          <div className="p-6 pt-4 bg-white/40 backdrop-blur-md rounded-b-[2rem]">
             <motion.div 
               whileHover={{ scale: 1.01 }}
-              className="relative flex items-center rounded-[1.25rem] bg-white border border-[#FFD8C2] focus-within:border-[#E76F51] focus-within:ring-4 focus-within:ring-[#E76F51]/10 transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="relative flex items-center rounded-[1.25rem] bg-white border border-[#E8D5C4] focus-within:border-[#D4A98A] focus-within:ring-4 focus-within:ring-[#D4A98A]/20 transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <input 
                 type="text"
@@ -279,7 +255,7 @@ export default function ChatPage() {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Ask your clinical question..."
-                className="w-full bg-transparent px-6 py-4 text-sm font-medium outline-none text-[#3E2723] placeholder:text-slate-400"
+                className="w-full bg-transparent px-6 py-4 text-sm font-medium outline-none text-[#3E2723] placeholder:text-[#A1887F]"
               />
               <motion.button 
                 whileHover={inputValue.trim() ? { scale: 1.1, rotate: 10 } : {}}
@@ -289,15 +265,15 @@ export default function ChatPage() {
                 className={cn(
                   "mr-2 p-3 rounded-xl transition-all duration-300 flex items-center justify-center shrink-0",
                   inputValue.trim() 
-                    ? "bg-[#E76F51] text-white shadow-[0_5px_15px_rgba(231,111,81,0.4)]" 
-                    : "bg-[#FFF5F0] text-[#FFD8C2]"
+                    ? "bg-[#8D6E63] text-white shadow-[0_5px_15px_rgba(141,110,99,0.4)]" 
+                    : "bg-[#F5EDE4] text-[#A1887F]"
                 )}
               >
                 <Send size={18} className={inputValue.trim() ? "ml-0.5" : ""} />
               </motion.button>
             </motion.div>
             <div className="mt-4 flex items-center justify-center gap-4">
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+              <p className="text-[9px] font-bold text-[#A1887F] uppercase tracking-widest flex items-center gap-1.5">
                 <Info size={12} /> AI responses are for informational purposes only. Consult a doctor for diagnosis.
               </p>
             </div>
@@ -314,25 +290,20 @@ export default function ChatPage() {
               whileHover={{ y: -6, scale: 1.02 }}
               className="relative rounded-[1.5rem] overflow-hidden cursor-pointer group h-[96px]"
            >
-              {/* Background image */}
-              <div className="absolute inset-0">
-                <Image src="/scan-box-image.png" alt="" fill className="object-cover opacity-25 saturate-150 group-hover:scale-110 group-hover:opacity-30 transition-all duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-[#FFF5F0]/70 to-[#FFD8C2]/50 backdrop-blur-[16px]" />
-                <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-white/70" />
-              </div>
-              {/* Content */}
+              <div className="absolute inset-0 bg-white/75 backdrop-blur-xl border border-white/90 shadow-[0_6px_30px_rgba(92,64,51,0.05)]" />
+              <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-[#EADBCE]/50 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform" />
+              
               <div className="relative z-10 h-full flex items-center gap-4 p-4">
                 <div className="relative shrink-0">
-                  <div className="absolute inset-0 rounded-xl bg-[#E76F51]/20 blur-lg scale-150" />
-                  <div className="relative w-12 h-12 rounded-xl bg-white/70 backdrop-blur-md flex items-center justify-center text-[#E76F51] border border-white/80 shadow-[0_8px_20px_rgba(231,111,81,0.2)] group-hover:bg-[#E76F51] group-hover:text-white transition-all duration-500">
-                    <Stethoscope size={22} className="group-hover:scale-110 transition-transform" />
+                  <div className="relative w-12 h-12 rounded-xl bg-[#F0E8DF] border border-[#E8D5C4] flex items-center justify-center text-[#8D6E63] group-hover:bg-[#8D6E63] group-hover:text-white transition-all duration-300">
+                    <Stethoscope size={20} className="group-hover:scale-110 transition-transform" />
                   </div>
                 </div>
                 <div className="flex-1">
                   <h4 className="text-[11px] font-black uppercase tracking-widest text-[#3E2723]">Clinical Guidance</h4>
-                  <p className="text-[10px] text-[#5C4033]/70 font-medium mt-0.5">CareBot explains your scan results.</p>
+                  <p className="text-[10px] text-[#7D5A4F] font-medium mt-0.5">CareBot explains your scan results.</p>
                 </div>
-                <ChevronRight size={16} className="text-[#E76F51]/50 group-hover:text-[#E76F51] group-hover:translate-x-1 transition-all shrink-0" />
+                <ChevronRight size={16} className="text-[#A1887F] group-hover:text-[#8D6E63] group-hover:translate-x-1 transition-all shrink-0" />
               </div>
            </motion.div>
 
@@ -344,25 +315,20 @@ export default function ChatPage() {
               whileHover={{ y: -6, scale: 1.02 }}
               className="relative rounded-[1.5rem] overflow-hidden cursor-pointer group h-[96px]"
            >
-              {/* Background image */}
-              <div className="absolute inset-0">
-                <Image src="/scan-box-image.png" alt="" fill className="object-cover object-right opacity-25 saturate-150 group-hover:scale-110 group-hover:opacity-30 transition-all duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-[#FFF5F0]/70 to-[#FFD8C2]/50 backdrop-blur-[16px]" />
-                <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-white/70" />
-              </div>
-              {/* Content */}
+              <div className="absolute inset-0 bg-white/75 backdrop-blur-xl border border-white/90 shadow-[0_6px_30px_rgba(92,64,51,0.05)]" />
+              <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-[#EADBCE]/50 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform" />
+              
               <div className="relative z-10 h-full flex items-center gap-4 p-4">
                 <div className="relative shrink-0">
-                  <div className="absolute inset-0 rounded-xl bg-[#E76F51]/20 blur-lg scale-150" />
-                  <div className="relative w-12 h-12 rounded-xl bg-white/70 backdrop-blur-md flex items-center justify-center text-[#E76F51] border border-white/80 shadow-[0_8px_20px_rgba(231,111,81,0.2)] group-hover:bg-[#E76F51] group-hover:text-white transition-all duration-500">
-                    <ShieldCheck size={22} className="group-hover:scale-110 transition-transform" />
+                  <div className="relative w-12 h-12 rounded-xl bg-[#F0E8DF] border border-[#E8D5C4] flex items-center justify-center text-[#8D6E63] group-hover:bg-[#8D6E63] group-hover:text-white transition-all duration-300">
+                    <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
                   </div>
                 </div>
                 <div className="flex-1">
                   <h4 className="text-[11px] font-black uppercase tracking-widest text-[#3E2723]">Privacy Protected</h4>
-                  <p className="text-[10px] text-[#5C4033]/70 font-medium mt-0.5">Chat data is encrypted and secure.</p>
+                  <p className="text-[10px] text-[#7D5A4F] font-medium mt-0.5">Chat data is encrypted and secure.</p>
                 </div>
-                <ChevronRight size={16} className="text-[#E76F51]/50 group-hover:text-[#E76F51] group-hover:translate-x-1 transition-all shrink-0" />
+                <ChevronRight size={16} className="text-[#A1887F] group-hover:text-[#8D6E63] group-hover:translate-x-1 transition-all shrink-0" />
               </div>
            </motion.div>
         </div>

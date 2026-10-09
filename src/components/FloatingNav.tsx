@@ -18,6 +18,9 @@ export const FloatingNav = () => {
   const pathname = usePathname();
   const { isAuthenticated } = useAuthStore();
 
+  // Hide on dashboard and doctor routes – they have their own navs
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/doctor")) return null;
+
   const filteredNavItems = navItems.filter(item => !item.protected || isAuthenticated);
 
   return (

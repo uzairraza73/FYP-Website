@@ -50,7 +50,7 @@ export const Header = () => {
     router.push("/");
   };
 
-  if (pathname.startsWith("/doctor")) {
+  if (pathname.startsWith("/doctor") || pathname.startsWith("/dashboard")) {
     return null;
   }
 

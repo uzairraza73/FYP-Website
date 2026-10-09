@@ -28,7 +28,7 @@ function FieldIcon({ children }: { children: React.ReactNode }) {
 }
 
 // ─── DOCTOR SIGNUP ────────────────────────────────────────────────────────────
-function DoctorSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) => void }) {
+function DoctorSignup({ handleSubmit }: { handleSubmit: (name: string, email: string) => void }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -103,7 +103,7 @@ function DoctorSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) => 
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(name, email); }} className="space-y-4">
               {/* Row 1: Name & Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="relative group">
@@ -230,7 +230,7 @@ function DoctorSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) => 
 }
 
 // ─── PATIENT SIGNUP ───────────────────────────────────────────────────────────
-function PatientSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) => void }) {
+function PatientSignup({ handleSubmit }: { handleSubmit: (name: string, email: string) => void }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -291,7 +291,7 @@ function PatientSignup({ handleSubmit }: { handleSubmit: (e: React.FormEvent) =>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3.5">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(name, email); }} className="space-y-3.5">
               {/* Name */}
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><User size={15} /></div>
@@ -374,14 +374,13 @@ function SignupContent() {
   const { login: setLogin } = useAuthStore();
   const role = searchParams.get("role") || "patient";
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (name: string, email: string) => {
     setLogin({
-      name: role === "doctor" ? "Dr. New Doctor" : "New Patient",
+      name: name || (role === "doctor" ? "Dr. New Doctor" : "New Patient"),
       role: role as "patient" | "doctor",
-      email: ""
+      email: email || ""
     });
-    router.push(role === "doctor" ? "/doctor" : "/onboarding");
+    router.push(role === "doctor" ? "/doctor" : "/dashboard");
   };
 
   if (role === "doctor") return <DoctorSignup handleSubmit={handleSubmit} />;

@@ -125,7 +125,7 @@ export default function PrivacyPage() {
           </div>
           <div>
             <h3 className="text-base font-black mb-1">Privacy Questions?</h3>
-            <p className="text-white/70 text-sm font-medium">Contact our Data Protection Officer at <span className="text-[#FFD8C2] font-bold">privacy@oncura.ai</span></p>
+            <p className="text-white/70 text-sm font-medium">To reach our Data Protection Officer, please <span className="text-[#FFD8C2] font-bold">Contact Us</span></p>
           </div>
         </motion.div>
       </section>

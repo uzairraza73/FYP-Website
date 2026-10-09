@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import {
   LayoutDashboard, Users, Calendar, MessageSquare,
@@ -41,17 +43,17 @@ export function DoctorLayout({ children }: { children: React.ReactNode }) {
         animate={{ opacity: 1, x: 0 }}
         className="relative z-10 w-[220px] flex-shrink-0 flex flex-col bg-white/60 backdrop-blur-xl border-r border-white/50 shadow-[4px_0_30px_rgba(92,64,51,0.06)] min-h-screen"
       >
-        <div className="px-8 pt-8 pb-6">
-          <div className="flex items-start">
-            <div>
-              <span className="text-3xl font-black text-[#3E2723] leading-none">ON</span>
-              <div className="flex gap-0.5 mt-0.5 ml-0.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#E76F51]" />
-                <div className="w-1.5 h-1.5 rounded-full bg-[#8D6E63]" />
-              </div>
-            </div>
-          </div>
-          <p className="text-[9px] font-black tracking-[0.25em] text-[#8D6E63] uppercase mt-1">ONCURA</p>
+        <div className="px-7 pt-8 pb-6 flex items-center justify-center">
+          <Link href="/" className="block">
+            <Image
+              src="/logo.png"
+              alt="ONCURA Logo"
+              width={140}
+              height={50}
+              className="object-contain"
+              priority
+            />
+          </Link>
         </div>
 
         <nav className="flex-1 px-4 space-y-1">

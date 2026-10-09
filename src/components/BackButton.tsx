@@ -4,52 +4,38 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/utils/cn";
-import { useSettingsStore } from "@/store/useSettingsStore";
 
 interface BackButtonProps {
   className?: string;
   variant?: "default" | "brown";
+  href?: string;
 }
 
-export const BackButton = ({ className, variant = "default" }: BackButtonProps) => {
+export const BackButton = ({ className, variant = "default", href }: BackButtonProps) => {
   const router = useRouter();
-  const { theme } = useSettingsStore();
+
+  const handleClick = () => {
+    if (href) router.push(href);
+    else router.back();
+  };
 
   return (
     <motion.button
-      onClick={() => router.back()}
+      onClick={handleClick}
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      whileHover={{ scale: 1.1, x: -5 }}
+      whileHover={{ scale: 1.05, x: -3 }}
       whileTap={{ scale: 0.95 }}
       className={cn(
-        "group flex items-center gap-3 px-4 py-2 rounded-[1.25rem] transition-all duration-300 shadow-lg relative z-20 cursor-pointer",
-        variant === "brown" 
-          ? "bg-white border border-[#FFD8C2] text-[#5C4033] hover:text-[#E76F51] hover:bg-[#FFF5F0] hover:border-[#E76F51] shadow-[0_10px_20px_rgba(92,64,51,0.05)]"
-          : (theme === 'dark' 
-            ? "bg-slate-900/50 border border-white/5 text-slate-400 hover:text-white hover:bg-blue-600/20 hover:border-blue-500/30" 
-            : "bg-white/80 border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50 shadow-slate-200/50"),
+        "group flex items-center gap-3 px-4 py-2.5 rounded-full transition-all duration-300 shadow-sm relative z-20 cursor-pointer",
+        "bg-white/80 backdrop-blur-sm border border-white/80 text-[#5C4033] hover:bg-white hover:border-[#D4A98A] hover:text-[#3E2723]",
         className
       )}
     >
-      <div className={cn(
-        "w-8 h-8 rounded-xl flex items-center justify-center transition-colors",
-        variant === "brown"
-          ? "bg-[#FFF5F0] group-hover:bg-[#E76F51] group-hover:text-white text-[#E76F51]"
-          : (theme === 'dark' ? "bg-white/5 group-hover:bg-blue-500/20" : "bg-slate-100 group-hover:bg-blue-100")
-      )}>
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+      <div className="w-7 h-7 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#8D6E63] group-hover:bg-[#8D6E63] group-hover:text-white transition-all duration-300">
+        <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
       </div>
-      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Go Back</span>
-      
-      {/* Animated Shine Effect */}
-      <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-        <motion.div 
-          animate={{ x: ['-100%', '200%'] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-y-0 w-8 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12"
-        />
-      </div>
+      <span className="text-[11px] font-black uppercase tracking-widest">Go Back</span>
     </motion.button>
   );
 };

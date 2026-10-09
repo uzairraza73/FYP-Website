@@ -7,6 +7,7 @@ export interface DoctorAvailability {
   area: string;
   phone: string;
   age: number;
+  experience: number; // Years of experience
   image: string;
   rating: number;
   presence: {
@@ -26,6 +27,7 @@ export const availableDoctors: DoctorAvailability[] = [
     area: "Johar Town",
     phone: "+923030042034",
     age: 42,
+    experience: 15,
     image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 4.9,
     presence: [
@@ -43,6 +45,7 @@ export const availableDoctors: DoctorAvailability[] = [
     area: "Gulberg",
     phone: "+923456789012",
     age: 45,
+    experience: 18,
     image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 4.8,
     presence: [
@@ -59,6 +62,7 @@ export const availableDoctors: DoctorAvailability[] = [
     area: "DHA",
     phone: "+923214567890",
     age: 38,
+    experience: 10,
     image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 5.0,
     presence: [
@@ -76,6 +80,7 @@ export const availableDoctors: DoctorAvailability[] = [
     area: "F-8 Markaz",
     phone: "+923001234567",
     age: 50,
+    experience: 25,
     image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 4.7,
     presence: [

@@ -6,8 +6,8 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
-  LogOut, Globe, Moon, Sun, Bell, Shield, User,
-  ChevronRight, Check
+  LogOut, Globe, Bell, User,
+  Check
 } from "lucide-react";
 
 const LANGUAGES = ["English", "Urdu", "Arabic"];
@@ -17,7 +17,6 @@ export default function SettingsPage() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const [language, setLanguage] = useState("English");
-  const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState("All Notifications");
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -72,25 +71,6 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Appearance */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/70 rounded-3xl p-6 shadow-sm">
-          <h2 className="text-xs font-black uppercase tracking-widest text-[#8D6E63] mb-4 flex items-center gap-2">
-            {darkMode ? <Moon size={14} /> : <Sun size={14} />} Appearance
-          </h2>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-bold text-[#3E2723]">Dark Mode</p>
-              <p className="text-[11px] text-[#8D6E63]">Toggle between light and dark theme</p>
-            </div>
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className={`relative w-12 h-6 rounded-full transition-all duration-300 ${darkMode ? "bg-[#5C4033]" : "bg-[#D7CCC8]"}`}
-            >
-              <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-all duration-300 ${darkMode ? "left-6" : "left-0.5"}`} />
-            </button>
-          </div>
-        </div>
-
         {/* Notifications */}
         <div className="bg-white/70 backdrop-blur-sm border border-white/70 rounded-3xl p-6 shadow-sm">
           <h2 className="text-xs font-black uppercase tracking-widest text-[#8D6E63] mb-4 flex items-center gap-2">
@@ -112,18 +92,6 @@ export default function SettingsPage() {
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Privacy */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/70 rounded-3xl p-6 shadow-sm">
-          <h2 className="text-xs font-black uppercase tracking-widest text-[#8D6E63] mb-4 flex items-center gap-2">
-            <Shield size={14} /> Privacy & Security
-          </h2>
-          {["Change Password", "Two-Factor Authentication", "Privacy Policy", "Terms of Service"].map(item => (
-            <button key={item} className="w-full flex items-center justify-between py-3 text-sm text-[#5C4033] font-semibold hover:text-[#3E2723] border-b border-[#E8D5C4]/40 last:border-0 transition-colors">
-              {item} <ChevronRight size={16} className="text-[#A1887F]" />
-            </button>
-          ))}
         </div>
 
         {/* Logout */}
