@@ -125,18 +125,22 @@ export const Header = () => {
           <div className="flex-1 flex items-center justify-end gap-3">
             {!isAuthenticated ? (
               <>
-                <Link
-                  href="/auth/role-selection?mode=login"
-                  className="hidden sm:block text-[11px] font-black uppercase tracking-[0.18em] text-[#5C4033]/70 hover:text-[#3E2723] transition-colors duration-200"
-                >
-                  {t.signIn}
+                <Link href="/auth/role-selection?mode=login">
+                  <motion.button
+                    whileHover={{ scale: 1.04, boxShadow: "0 4px 16px rgba(92,64,51,0.2)" }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    className="hidden sm:flex items-center px-6 py-2.5 text-[12px] font-black uppercase tracking-[0.18em] bg-[#3E2723] text-white rounded-[1rem] shadow-[0_4px_14px_rgba(62,39,35,0.3)] hover:bg-[#2C1810] transition-colors duration-200"
+                  >
+                    {t.signIn}
+                  </motion.button>
                 </Link>
                 <Link href="/auth/role-selection?mode=signup">
                   <motion.button
-                    whileHover={{ scale: 1.04, boxShadow: "0 6px 20px rgba(231,111,81,0.3)" }}
+                    whileHover={{ scale: 1.04, boxShadow: "0 6px 20px rgba(183,81,51,0.45)" }}
                     whileTap={{ scale: 0.97 }}
                     transition={{ type: "spring", stiffness: 400 }}
-                    className="px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] bg-[#E76F51] text-white rounded-[1rem] shadow-[0_4px_14px_rgba(231,111,81,0.25)] hover:bg-[#D4603F] transition-colors duration-200"
+                    className="px-7 py-2.5 text-[12px] font-black uppercase tracking-[0.18em] bg-[#C0392B] text-white rounded-[1rem] shadow-[0_4px_14px_rgba(192,57,43,0.35)] hover:bg-[#A93226] transition-colors duration-200"
                   >
                     Sign Up
                   </motion.button>
@@ -273,10 +277,10 @@ export const Header = () => {
                 {!isAuthenticated && (
                   <div className="flex gap-2 pt-2 border-t border-[#FFD8C2]/40 mt-2">
                     <Link href="/auth/role-selection?mode=login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                      <button className="w-full py-3 text-[11px] font-black uppercase tracking-widest text-[#5C4033] border border-[#E4C5B5] rounded-xl hover:bg-[#FFD8C2]/30 transition-colors">Sign In</button>
+                      <button className="w-full py-3 text-[12px] font-black uppercase tracking-widest text-white bg-[#3E2723] rounded-xl shadow-[0_4px_14px_rgba(62,39,35,0.3)] hover:bg-[#2C1810] transition-colors">Sign In</button>
                     </Link>
                     <Link href="/auth/role-selection?mode=signup" className="flex-1" onClick={() => setMobileOpen(false)}>
-                      <button className="w-full py-3 text-[11px] font-black uppercase tracking-widest bg-[#E76F51] text-white rounded-xl shadow-[0_4px_14px_rgba(231,111,81,0.25)] hover:bg-[#D4603F] transition-colors">Sign Up</button>
+                      <button className="w-full py-3 text-[12px] font-black uppercase tracking-widest bg-[#C0392B] text-white rounded-xl shadow-[0_4px_14px_rgba(192,57,43,0.35)] hover:bg-[#A93226] transition-colors">Sign Up</button>
                     </Link>
                   </div>
                 )}
