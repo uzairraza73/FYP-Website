@@ -41,7 +41,7 @@ export const FloatingNav = () => {
                 whileTap={{ scale: 0.9 }}
                 className={cn(
                   "flex flex-col items-center gap-1 transition-colors duration-300",
-                  isActive ? "text-blue-600" : "text-gray-400 hover:text-gray-600"
+                  isActive ? "text-[#5D4037]" : "text-[#8D6E63] hover:text-[#5D4037]"
                 )}
               >
                 <Icon size={24} />
@@ -49,7 +49,7 @@ export const FloatingNav = () => {
                 {isActive && (
                   <motion.div
                     layoutId="active-tab"
-                    className="absolute -top-1 w-1 h-1 bg-blue-600 rounded-full"
+                    className="absolute -top-1 w-1 h-1 bg-[#5D4037] rounded-full"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
