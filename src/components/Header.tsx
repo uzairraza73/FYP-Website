@@ -80,13 +80,17 @@ export const Header = () => {
           {/* ── Logo ── */}
           <div className="flex-1 flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <motion.div whileHover={{ scale: 1.04 }} transition={{ type: "spring", stiffness: 400 }}>
+              <motion.div
+                whileHover={{ scale: 1.06 }}
+                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+              >
                 <Image
                   src={logoImg}
                   alt="Oncura Logo"
-                  width={120}
-                  height={38}
-                  className="object-contain opacity-95 group-hover:opacity-100 transition-opacity duration-300"
+                  width={150}
+                  height={48}
+                  className="object-contain opacity-100 transition-all duration-300 drop-shadow-sm group-hover:drop-shadow-md"
+                  style={{ filter: "drop-shadow(0 1px 3px rgba(92,64,51,0.18))" }}
                 />
               </motion.div>
             </Link>
