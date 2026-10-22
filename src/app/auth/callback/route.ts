@@ -7,10 +7,17 @@ export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const role = requestUrl.searchParams.get("role") || "patient";
-  const origin = requestUrl.origin;
+  
+  // Support forwarded headers in production / reverse proxies (Vercel)
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
+  const origin = forwardedHost 
+    ? `${forwardedProto}://${forwardedHost}` 
+    : requestUrl.origin;
 
   if (code) {
-    const cookieStore = await cookies();
+    const destination = role === "doctor" ? "/doctor" : "/dashboard";
+    const redirectResponse = NextResponse.redirect(`${origin}${destination}`);
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,17 +25,12 @@ export async function GET(request: NextRequest) {
       {
         cookies: {
           getAll() {
-            return cookieStore.getAll();
+            return request.cookies.getAll();
           },
           setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options)
-              );
-            } catch {
-              // The `setAll` method was called from a Server Component.
-              // This can be ignored if you have middleware refreshing sessions.
-            }
+            cookiesToSet.forEach(({ name, value, options }) => {
+              redirectResponse.cookies.set(name, value, options);
+            });
           },
         },
       }
@@ -37,12 +39,12 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Redirect to the correct dashboard based on role
-      const destination = role === "doctor" ? "/doctor" : "/dashboard";
-      return NextResponse.redirect(`${origin}${destination}`);
+      return redirectResponse;
     }
+
+    console.error("[auth/callback] Error exchanging code for session:", error);
   }
 
-  // If there's an error, redirect to login with an error message
+  // If there's an error or no code, redirect to login with error parameter
   return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
 }
