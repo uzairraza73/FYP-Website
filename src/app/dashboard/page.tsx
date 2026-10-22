@@ -1,49 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useScanStore } from "@/store/useScanStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  LayoutDashboard, Calendar, FileText, MessageSquare,
-  Settings, User, Bell, ChevronRight, ChevronDown,
-  Heart, ArrowRight, LogOut, Activity, Scan, Stethoscope
+  LayoutDashboard,
+  Calendar,
+  FileText,
+  MessageSquare,
+  Settings,
+  User,
+  Bell,
+  ChevronRight,
+  LogOut,
+  Activity,
+  Scan,
+  Stethoscope,
+  Plus,
+  RefreshCw,
+  ShieldCheck,
+  Clock,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
+import {
+  getScans,
+  getAppointments,
+  getMessages,
+} from "@/utils/supabase/queries";
+import type { DbScan, Appointment, DbMessage } from "@/utils/supabase/types";
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard",       href: "/dashboard"              },
   { icon: Calendar,        label: "My Appointments", href: "/dashboard/appointments" },
   { icon: FileText,        label: "Medical Records", href: "/history"                },
-  { icon: MessageSquare,   label: "Messages",        href: "/dashboard/messages", badge: 2  },
+  { icon: MessageSquare,   label: "Messages",        href: "/dashboard/messages", badge: 1 },
   { icon: Settings,        label: "Settings",        href: "/dashboard/settings"     },
-];
-
-const QUICK_ACTIONS = [
-  { icon: Calendar,      label: "Appointments", href: "/dashboard/appointments", color: "bg-[#EAE0D6]" },
-  { icon: FileText,      label: "Medical Records", href: "/history",             color: "bg-[#EAE0D6]" },
-  { icon: MessageSquare, label: "Messages",      href: "/dashboard/messages",    color: "bg-[#EAE0D6]" },
-  { icon: User,          label: "Profile",       href: "/profile",               color: "bg-[#EAE0D6]" },
-];
-
-const FEATURE_CARDS = [
-  { icon: Calendar,      title: "My Appointments", desc: "View and manage your upcoming appointments.",                    href: "/dashboard/appointments", color: "text-[#8D6E63]" },
-  { icon: FileText,      title: "Medical Records", desc: "Access your test results, prescriptions and health history.",    href: "/history",                color: "text-[#8D6E63]" },
-  { icon: MessageSquare, title: "Doctor Messages", desc: "Message your doctor directly and get clinical guidance.",        href: "/dashboard/messages",     color: "text-[#8D6E63]", badge: 2 },
-  { icon: User,          title: "My Profile",      desc: "Update your personal and medical information.",                  href: "/profile",                color: "text-[#8D6E63]" },
 ];
 
 export default function DashboardPage() {
   const { user, logout } = useAuthStore();
-  const { history } = useScanStore();
   const router = useRouter();
   const [activeNav, setActiveNav] = useState("Dashboard");
-  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const [scans, setScans] = useState<DbScan[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [messages, setMessages] = useState<DbMessage[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const fullName = user?.name || "Sara Khan";
   const firstName = fullName.split(" ")[0];
+  const patientId = user?.email ? user.email.replace(/[^a-zA-Z0-9]/g, "-") : "patient-1";
+
+  const fetchPatientData = async () => {
+    setLoading(true);
+    try {
+      const [fetchedScans, fetchedAppts, fetchedMsgs] = await Promise.all([
+        getScans(patientId),
+        getAppointments({ patientId }),
+        getMessages(patientId),
+      ]);
+      setScans(fetchedScans);
+      setAppointments(fetchedAppts);
+      setMessages(fetchedMsgs);
+    } catch (err) {
+      console.error("Error loading patient dashboard:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatientData();
+  }, [patientId]);
 
   const handleNav = (label: string, href: string) => {
     setActiveNav(label);
@@ -55,9 +88,13 @@ export default function DashboardPage() {
     router.push("/auth/role-selection");
   };
 
+  const now = new Date();
+  const nextAppt = appointments.find(
+    (a) => new Date(a.scheduled_at) >= now && a.status !== "cancelled"
+  );
+
   return (
     <div className="min-h-screen font-plus-jakarta bg-[#F0E8DF] flex overflow-hidden relative">
-
       {/* Global blobs */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#D4A98A]/20 rounded-full blur-[120px]" />
@@ -93,16 +130,18 @@ export default function DashboardPage() {
               <button
                 key={label}
                 onClick={() => handleNav(label, href)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#E8D5C4]/70 text-[#3E2723] shadow-sm"
+                    ? "bg-[#E8D5C4]/70 text-[#3E2723] shadow-sm font-bold"
                     : "text-[#8D6E63] hover:bg-[#F0E8DF]/80 hover:text-[#5C4033]"
                 }`}
               >
-                <Icon size={17} className={isActive ? "text-[#5C4033]" : "text-[#A1887F]"} />
-                <span className="flex-1 text-left">{label}</span>
+                <div className="flex items-center gap-3">
+                  <Icon size={18} />
+                  <span>{label}</span>
+                </div>
                 {badge && (
-                  <span className="w-5 h-5 rounded-full bg-[#E76F51] text-white text-[10px] font-black flex items-center justify-center">
+                  <span className="w-5 h-5 rounded-full bg-[#E76F51] text-white text-[10px] font-bold flex items-center justify-center">
                     {badge}
                   </span>
                 )}
@@ -111,267 +150,282 @@ export default function DashboardPage() {
           })}
         </nav>
 
-        {/* Bottom CTA */}
-        <div className="px-5 pb-6 pt-4 border-t border-[#E8D5C4]/50">
-          <button onClick={() => router.push("/scan")}
-            className="w-full py-3 bg-[#8D6E63] hover:bg-[#5C4033] text-white text-xs font-black rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 mb-4">
-            <Scan size={14} /> AI Skin Scan
-          </button>
-          <button onClick={handleLogout} className="w-full flex items-center gap-2 text-[11px] font-bold text-[#A1887F] hover:text-[#5C4033] transition-colors uppercase tracking-wider cursor-pointer">
-            <LogOut size={12} /> Sign Out
+        {/* Bottom User Area */}
+        <div className="p-4 border-t border-[#E8D5C4]/60">
+          <div className="p-3 bg-[#F5EDE4] rounded-2xl flex items-center gap-3 mb-2">
+            <div className="w-9 h-9 rounded-full bg-[#8D6E63] text-white font-bold flex items-center justify-center text-xs">
+              {firstName.charAt(0)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-black text-[#3E2723] truncate">{fullName}</p>
+              <p className="text-[10px] text-[#8D6E63] capitalize">Patient Account</p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="w-full py-2 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#A1887F] hover:text-[#5C4033] transition-colors cursor-pointer"
+          >
+            <LogOut size={12} />
+            Sign Out
           </button>
         </div>
       </motion.aside>
 
-      {/* ── MAIN ── */}
-      <div className="relative z-10 flex-1 flex flex-col min-h-screen overflow-y-auto">
-
-        {/* Top Bar */}
-        <header className="sticky top-0 z-20 bg-[#F0E8DF]/85 backdrop-blur-xl border-b border-white/50 px-8 py-4 flex items-center justify-between">
+      {/* ── MAIN CONTENT ── */}
+      <main className="flex-1 overflow-y-auto min-h-screen relative z-10 p-8 lg:p-10">
+        {/* Top greeting */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <p className="text-xs text-[#A1887F] font-medium uppercase tracking-wider">Patient Dashboard</p>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#E76F51]">
+                Patient Health Hub
+              </span>
+              <span className="text-xs text-[#A1887F]">·</span>
+              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                Connected to Supabase
+              </span>
+            </div>
+            <h1 className="text-3xl font-black text-[#3E2723]">Hello, {firstName}</h1>
+            <p className="text-xs text-[#8D6E63] font-medium mt-0.5">
+              Track your skin scan diagnostics, upcoming doctor visits, and clinical messages.
+            </p>
           </div>
+
           <div className="flex items-center gap-3">
-            {/* Notification Bell */}
-            <button className="relative w-9 h-9 rounded-full bg-white/80 border border-white/80 flex items-center justify-center text-[#8D6E63] hover:bg-white transition-all shadow-sm">
-              <Bell size={16} />
-              <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#E76F51] border-2 border-[#F0E8DF]" />
+            <button
+              onClick={fetchPatientData}
+              className="p-3 rounded-2xl bg-white/70 border border-[#E8D5C4] text-[#8D6E63] hover:text-[#3E2723] hover:bg-white transition-all shadow-sm flex items-center gap-1.5 text-xs font-bold cursor-pointer"
+            >
+              <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+              Sync
             </button>
-
-            {/* User Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-2.5 bg-white/80 border border-white/80 rounded-full pl-1.5 pr-4 py-1.5 shadow-sm hover:bg-white transition-all"
-              >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#D4A98A] to-[#8D6E63] flex items-center justify-center text-white text-xs font-black">
-                  {fullName.charAt(0)}
-                </div>
-                <span className="text-xs font-black text-[#3E2723]">{fullName}</span>
-                <ChevronDown size={12} className={`text-[#A1887F] transition-transform ${showUserMenu ? "rotate-180" : ""}`} />
-              </button>
-              {showUserMenu && (
-                <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-                  className="absolute right-0 top-full mt-2 w-52 bg-white/95 backdrop-blur-xl border border-white rounded-2xl shadow-xl overflow-hidden z-30">
-                  <div className="px-4 py-3 border-b border-[#F0E8DF]">
-                    <p className="text-sm font-black text-[#3E2723]">{fullName}</p>
-                    <p className="text-xs text-[#A1887F]">{user?.email || "patient@oncura.pk"}</p>
-                  </div>
-                  {[{ label: "My Profile", href: "/profile" }, { label: "Settings", href: "/dashboard/settings" }, { label: "My Appointments", href: "/dashboard/appointments" }].map(item => (
-                    <Link key={item.label} href={item.href} onClick={() => setShowUserMenu(false)}
-                      className="block w-full text-left px-4 py-2.5 text-sm text-[#5C4033] hover:bg-[#F5EDE4] transition-colors font-medium">
-                      {item.label}
-                    </Link>
-                  ))}
-                  <button onClick={() => { setShowUserMenu(false); handleLogout(); }} className="block w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors font-bold border-t border-[#F0E8DF] cursor-pointer">
-                    Sign Out
-                  </button>
-                </motion.div>
-              )}
-            </div>
+            <button
+              onClick={() => router.push("/scan")}
+              className="px-6 py-3 rounded-2xl bg-[#8D6E63] hover:bg-[#5C4033] text-white text-xs font-black uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
+            >
+              <Scan size={15} />
+              Start New Skin Scan
+            </button>
           </div>
-        </header>
+        </div>
 
-        <main className="flex-1 p-6 space-y-6">
+        {/* ── HERO BANNER: NEXT APPOINTMENT / SCAN CTA ── */}
+        <div className="p-7 bg-gradient-to-r from-[#8D6E63] to-[#5C4033] text-white rounded-[2.5rem] shadow-[0_15px_40px_rgba(92,64,51,0.18)] mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="absolute -top-10 -right-10 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none" />
 
-          {/* ── HERO (matches reference image) ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="relative rounded-[2.5rem] overflow-hidden min-h-[280px] bg-gradient-to-br from-[#F5EDE4] via-[#EFE3D7] to-[#E3D0BD] border border-white/60 shadow-[0_8px_40px_rgba(92,64,51,0.08)]"
-          >
-            {/* Decorative blobs inside hero */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#D4A98A]/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-            <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#C8A882]/15 rounded-full blur-[60px] pointer-events-none" />
-            {/* Inner ring */}
-            <div className="absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/40 pointer-events-none" />
+          <div className="space-y-2 relative z-10 max-w-xl">
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#FFD8C2] flex items-center gap-1.5">
+              <Sparkles size={13} />
+              AI Preventive Care System
+            </span>
+            <h2 className="text-2xl font-black">
+              {nextAppt ? "Upcoming Specialist Visit" : "Check Your Skin Health Regularly"}
+            </h2>
+            <p className="text-xs text-white/85 leading-relaxed font-medium">
+              {nextAppt
+                ? `You have a confirmed visit on ${new Date(nextAppt.scheduled_at).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })} at ${new Date(nextAppt.scheduled_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}.`
+                : "Capture high-resolution lesion photos to detect morphological irregularities early with Oncura's CNN model."}
+            </p>
+          </div>
 
-            {/* Organic leaf decoration (top left) */}
-            <div className="absolute top-0 left-0 opacity-20 pointer-events-none">
-              <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
-                <path d="M10 140 C30 80 80 50 110 10" stroke="#8D6E63" strokeWidth="2" fill="none"/>
-                <path d="M30 140 C50 90 90 60 120 20" stroke="#A1887F" strokeWidth="1.5" fill="none"/>
-                <ellipse cx="60" cy="70" rx="20" ry="50" stroke="#8D6E63" strokeWidth="1" fill="none" transform="rotate(-30 60 70)"/>
-              </svg>
-            </div>
+          <div className="flex items-center gap-3 relative z-10">
+            {nextAppt ? (
+              <button
+                onClick={() => router.push("/dashboard/appointments")}
+                className="px-6 py-3 rounded-full bg-white text-[#5C4033] hover:bg-[#F5EDE4] font-black text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
+              >
+                View Appointment
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push("/dashboard/appointments")}
+                className="px-6 py-3 rounded-full bg-white text-[#5C4033] hover:bg-[#F5EDE4] font-black text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
+              >
+                Book Consultation
+              </button>
+            )}
+          </div>
+        </div>
 
-            {/* Left Text Content */}
-            <div className="relative z-10 flex h-full items-stretch">
-              <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
-                {/* Breadcrumb pill */}
-                <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/70 rounded-full px-4 py-2 w-fit mb-5 shadow-sm">
-                  <User size={12} className="text-[#8D6E63]" />
-                  <span className="text-[11px] font-black text-[#5C4033] uppercase tracking-wider">Patient Dashboard</span>
-                </div>
-
-                <p className="text-base text-[#7D5A4F] font-medium mb-1">Welcome Back,</p>
-                <h1 className="text-4xl md:text-5xl font-black text-[#3E2723] leading-tight mb-4">{fullName}</h1>
-                <p className="text-sm text-[#7D5A4F] font-medium leading-relaxed max-w-sm mb-8">
-                  Your health matters to us. Access your appointments, medical records and more —{" "}
-                  <span className="font-black text-[#3E2723]">all in one place.</span>
+        {/* ── TWO COLUMN SECTION: RECENT SCANS & UPCOMING SCHEDULE ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+          {/* Left: Recent Skin Scans */}
+          <div className="lg:col-span-7 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 p-6 shadow-[0_6px_30px_rgba(92,64,51,0.04)]">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-lg font-black text-[#3E2723] flex items-center gap-2">
+                  <Scan size={18} className="text-[#E76F51]" />
+                  Recent Skin Scans
+                </h3>
+                <p className="text-xs text-[#8D6E63]">
+                  Synchronized from Supabase <code className="font-mono">scans</code> & <code className="font-mono">scan-images</code>
                 </p>
-
-                {/* Quick Action Icons (like the reference image) */}
-                <div className="flex items-center gap-6">
-                  {QUICK_ACTIONS.map(({ icon: Icon, label, href }) => (
-                    <button key={label} onClick={() => router.push(href)}
-                      className="flex flex-col items-center gap-2 group cursor-pointer">
-                      <div className="w-12 h-12 rounded-2xl bg-white/70 backdrop-blur-sm border border-white shadow-sm flex items-center justify-center text-[#8D6E63] group-hover:bg-[#8D6E63] group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                        <Icon size={20} />
-                      </div>
-                      <span className="text-[10px] font-bold text-[#7D5A4F] group-hover:text-[#3E2723] transition-colors tracking-wide">{label}</span>
-                    </button>
-                  ))}
-                </div>
               </div>
 
-              {/* Right Side: Photo + Tagline */}
-              <div className="relative hidden md:flex items-end justify-center pr-0 pb-0 w-[360px] shrink-0">
-                {/* "Your Health, Our Priority" handwriting text */}
-                <div className="absolute top-8 right-44 z-20 text-center">
-                  <p className="font-serif italic text-[#7D5A4F] text-xl leading-tight">Your Health,</p>
-                  <p className="font-serif italic text-[#7D5A4F] text-xl leading-tight">Our Priority.</p>
-                  <div className="mt-1 flex justify-center text-[#C69C7B]">
-                    <Heart size={16} fill="currentColor" />
-                  </div>
-                </div>
-
-                {/* Hero Woman Image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=480&h=380&q=90"
-                  alt="Health"
-                  className="w-full h-full object-cover object-top rounded-br-[2.5rem]"
-                  style={{ maxHeight: "280px" }}
-                />
-                {/* Gradient overlay bottom of image */}
-                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#EFE3D7] to-transparent pointer-events-none rounded-br-[2.5rem]" />
-              </div>
+              <button
+                onClick={() => router.push("/history")}
+                className="text-xs font-bold text-[#8D6E63] hover:text-[#3E2723] cursor-pointer"
+              >
+                View All
+              </button>
             </div>
-          </motion.div>
 
-
-
-          {/* ── BOTTOM ROW ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-5"
-          >
-            {/* Next Appointment Card */}
-            <div className="md:col-span-2 relative rounded-[1.75rem] overflow-hidden">
-              <div className="absolute inset-0 bg-white/75 backdrop-blur-xl rounded-[1.75rem] border border-white/90 shadow-[0_6px_30px_rgba(92,64,51,0.05)]" />
-              <div className="absolute -bottom-10 right-10 opacity-[0.05]">
-                <Stethoscope size={100} className="text-[#8D6E63]" />
+            {loading ? (
+              <div className="p-8 text-center space-y-2">
+                <RefreshCw className="animate-spin text-[#8D6E63] mx-auto" size={24} />
+                <p className="text-xs text-[#7D5A4F]">Loading scans...</p>
               </div>
-              <div className="relative z-10 p-7 flex items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-[#F0E8DF] border border-[#E8D5C4] flex items-center justify-center text-[#8D6E63] shadow-sm flex-shrink-0">
-                  <Calendar size={26} />
-                </div>
-                <div className="flex-1">
-                  <p className="text-[10px] text-[#A1887F] font-black uppercase tracking-widest mb-1">Next Appointment</p>
-                  <h3 className="text-lg font-black text-[#3E2723] mb-0.5">Dr. Ayesha Malik</h3>
-                  <p className="text-xs text-[#8D6E63] font-medium">General Physician</p>
-                  <div className="flex items-center gap-3 mt-2 text-xs text-[#7D5A4F] font-medium">
-                    <span className="flex items-center gap-1"><Calendar size={11} className="text-[#A1887F]" /> 12 Oct 2026</span>
-                    <span className="text-[#D7CCC8]">|</span>
-                    <span>10:30 AM</span>
-                  </div>
-                </div>
+            ) : scans.length === 0 ? (
+              <div className="p-8 text-center bg-[#FAF6F2] rounded-2xl border border-dashed border-[#E8D5C4]">
+                <p className="text-xs text-[#7D5A4F]">No scans recorded yet.</p>
                 <button
-                  onClick={() => router.push("/dashboard/appointments")}
-                  className="flex items-center gap-2 bg-[#8D6E63] hover:bg-[#5C4033] text-white text-xs font-black rounded-full px-5 py-3 transition-all duration-300 whitespace-nowrap shadow-md flex-shrink-0"
+                  onClick={() => router.push("/scan")}
+                  className="mt-2 text-xs font-bold text-[#8D6E63] hover:underline cursor-pointer"
                 >
-                  View Details <ArrowRight size={13} />
+                  Upload your first skin photo
                 </button>
               </div>
-            </div>
+            ) : (
+              <div className="space-y-3">
+                {scans.slice(0, 3).map((scan) => {
+                  const hasDoctorNotes = Boolean(scan.doctor_notes);
+                  return (
+                    <div
+                      key={scan.id}
+                      className="p-4 rounded-2xl bg-[#FAF6F2] border border-[#E8D5C4]/70 flex items-center justify-between gap-4 hover:bg-white transition-all shadow-xs"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-white border border-[#E8D5C4] relative flex-shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={scan.image_url}
+                            alt="Scan"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
 
-            {/* Quick Scan Card */}
-            <div
-              onClick={() => router.push("/scan")}
-              className="relative rounded-[1.75rem] overflow-hidden group cursor-pointer hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#8D6E63] to-[#5C4033] rounded-[1.75rem] shadow-[0_8px_30px_rgba(92,64,51,0.20)]" />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700" />
-              <div className="relative z-10 p-6 text-white flex flex-col justify-between h-full min-h-[140px]">
-                <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center mb-4">
-                  <Activity size={20} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="text-base font-black mb-1 leading-tight">AI Skin Scan</h3>
-                  <p className="text-xs text-white/75 font-medium mb-4">Analyze a skin lesion now with our AI model.</p>
-                  <div className="flex items-center gap-1.5 text-xs font-black text-white/90">
-                    Start Scan <ArrowRight size={13} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <h4 className="text-xs font-black text-[#3E2723]">
+                              {scan.condition || "Skin Lesion"}
+                            </h4>
+                            <span
+                              className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                                hasDoctorNotes
+                                  ? "bg-emerald-100 text-emerald-800"
+                                  : "bg-amber-100 text-amber-800"
+                              }`}
+                            >
+                              {hasDoctorNotes ? "Doctor Reviewed" : "Awaiting Review"}
+                            </span>
+                          </div>
 
-          {/* Health Tip Strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.38 }}
-            className="relative rounded-[1.75rem] overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-white/75 backdrop-blur-xl rounded-[1.75rem] border border-white/90 shadow-[0_6px_30px_rgba(92,64,51,0.05)]" />
-            <div className="relative z-10 p-6 flex items-center gap-5 flex-wrap">
-              <div className="w-10 h-10 rounded-xl bg-[#FFF0EB] border border-[#FFD8C2] flex items-center justify-center flex-shrink-0">
-                <Heart size={18} className="text-[#E76F51] fill-[#E76F51]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-black text-[#3E2723] uppercase tracking-wider mb-0.5">Daily Health Tip</p>
-                <p className="text-sm text-[#7D5A4F] font-medium">Apply SPF 30+ sunscreen daily to reduce skin cancer risk by up to 50%. Small steps today lead to a healthier tomorrow.</p>
-              </div>
-              <Link href="/health-guides" className="flex items-center gap-1.5 text-xs font-black text-[#8D6E63] hover:text-[#5C4033] transition-colors flex-shrink-0 whitespace-nowrap">
-                Learn More <ChevronRight size={14} />
-              </Link>
-            </div>
-          </motion.div>
+                          <p className="text-[11px] text-[#8D6E63]">
+                            Confidence: <strong className="text-[#3E2723]">{scan.confidence_score}%</strong> · ID #{scan.id.slice(0, 8)}
+                          </p>
 
-          {/* Recent AI Scans */}
-          {history.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
-              className="relative rounded-[1.75rem] overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-white/75 backdrop-blur-xl rounded-[1.75rem] border border-white/90 shadow-[0_6px_30px_rgba(92,64,51,0.05)]" />
-              <div className="relative z-10 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xs font-black text-[#3E2723] uppercase tracking-widest flex items-center gap-2">
-                    <Activity size={14} className="text-[#E76F51]" /> Recent AI Scans
-                  </h3>
-                  <Link href="/history" className="text-[10px] font-black text-[#8D6E63] hover:text-[#5C4033] transition-colors uppercase tracking-wider flex items-center gap-1">
-                    View All <ChevronRight size={12} />
-                  </Link>
-                </div>
-                <div className="flex gap-3 flex-wrap">
-                  {history.slice(0, 4).map((scan) => (
-                    <Link key={scan.id} href="/history">
-                      <div className="flex items-center gap-2 bg-[#F5EDE4] border border-[#E8D5C4] rounded-full px-4 py-2 text-xs font-bold text-[#5C4033] hover:bg-[#E8D5C4] transition-colors cursor-pointer">
-                        <span className={`w-2 h-2 rounded-full ${scan.riskLevel === "High" ? "bg-red-400" : scan.riskLevel === "Medium" ? "bg-orange-400" : "bg-emerald-400"}`} />
-                        {scan.type} — {scan.riskLevel}
+                          {scan.doctor_notes && (
+                            <p className="text-[10px] text-[#5C4033] mt-1 bg-[#F5EDE4] px-2 py-0.5 rounded border border-[#E8D5C4]/70">
+                              <strong className="text-[#3E2723]">Doctor:</strong> &quot;{scan.doctor_notes}&quot;
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </Link>
-                  ))}
-                </div>
+
+                      <button
+                        onClick={() => router.push("/result")}
+                        className="px-3.5 py-1.5 rounded-xl bg-white border border-[#E8D5C4] hover:bg-[#8D6E63] hover:text-white text-[#8D6E63] text-xs font-bold transition-all cursor-pointer flex-shrink-0"
+                      >
+                        Details
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
-            </motion.div>
-          )}
+            )}
+          </div>
 
-        </main>
-      </div>
+          {/* Right: Appointments & Quick Actions */}
+          <div className="lg:col-span-5 space-y-6">
+            {/* Appointments preview */}
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 p-6 shadow-[0_6px_30px_rgba(92,64,51,0.04)]">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-black text-[#3E2723] flex items-center gap-2">
+                    <Calendar size={18} className="text-[#8D6E63]" />
+                    Upcoming Visits
+                  </h3>
+                  <p className="text-xs text-[#8D6E63]">From Supabase appointments table</p>
+                </div>
+                <Link
+                  href="/dashboard/appointments"
+                  className="text-xs font-bold text-[#8D6E63] hover:text-[#3E2723]"
+                >
+                  Manage
+                </Link>
+              </div>
 
-      {/* Overlay to close dropdown */}
-      {showUserMenu && (
-        <div className="fixed inset-0 z-10" onClick={() => setShowUserMenu(false)} />
-      )}
+              {appointments.length === 0 ? (
+                <div className="text-center py-6 space-y-2">
+                  <p className="text-xs text-[#7D5A4F]">No upcoming appointments.</p>
+                  <button
+                    onClick={() => router.push("/dashboard/appointments")}
+                    className="text-xs font-black text-[#8D6E63] hover:underline"
+                  >
+                    + Schedule with Doctor
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {appointments.slice(0, 2).map((appt) => {
+                    const scheduled = new Date(appt.scheduled_at);
+                    return (
+                      <div
+                        key={appt.id}
+                        className="p-3.5 rounded-2xl bg-[#FAF6F2] border border-[#E8D5C4]/70 flex items-center justify-between"
+                      >
+                        <div>
+                          <p className="text-xs font-black text-[#3E2723]">
+                            {appt.doctor?.full_name || "Specialist Dermatologist"}
+                          </p>
+                          <p className="text-[11px] text-[#8D6E63] flex items-center gap-1.5 mt-0.5">
+                            <Clock size={11} />
+                            {scheduled.toLocaleDateString("en-US", { month: "short", day: "numeric" })} · {scheduled.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                          </p>
+                        </div>
+                        <span className="text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                          {appt.status}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Live Chat Banner */}
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 p-6 shadow-[0_6px_30px_rgba(92,64,51,0.04)]">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-black text-[#3E2723] flex items-center gap-2">
+                  <MessageSquare size={16} className="text-[#E76F51]" />
+                  Direct Doctor Messaging
+                </h3>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+              <p className="text-xs text-[#7D5A4F] mb-4">
+                Have questions about your skin scan or treatment plan? Message your doctor directly in real-time.
+              </p>
+              <button
+                onClick={() => router.push("/dashboard/messages")}
+                className="w-full py-3 rounded-full bg-[#8D6E63] hover:bg-[#5C4033] text-white text-xs font-black uppercase tracking-wider transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+              >
+                Open Message Inbox <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

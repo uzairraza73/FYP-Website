@@ -1,0 +1,160 @@
+{
+  "clientConnection": true,
+  "timestamp": "2026-10-21T20:14:55.377Z",
+  "supabaseUrl": "https://cuzoodihcsuxsxpxqtjb.supabase.co",
+  "tables": {
+    "profiles": {
+      "table": "profiles",
+      "verifiedColumns": [
+        "id",
+        "created_at",
+        "full_name",
+        "email",
+        "role"
+      ],
+      "read": {
+        "status": 200,
+        "success": true,
+        "rowCount": 0,
+        "error": null
+      },
+      "write": {
+        "status": 401,
+        "success": false,
+        "error": "new row violates row-level security policy for table \"profiles\"",
+        "reason": "Blocked by Row-Level Security (RLS) policy (anon client unauthenticated)",
+        "code": "42501"
+      }
+    },
+    "doctors": {
+      "table": "doctors",
+      "verifiedColumns": [
+        "id",
+        "created_at",
+        "specialization",
+        "experience_years",
+        "age"
+      ],
+      "read": {
+        "status": 200,
+        "success": true,
+        "rowCount": 0,
+        "error": null
+      },
+      "write": {
+        "status": 401,
+        "success": false,
+        "error": "new row violates row-level security policy for table \"doctors\"",
+        "reason": "Blocked by Row-Level Security (RLS) policy (anon client unauthenticated)",
+        "code": "42501"
+      }
+    },
+    "patients": {
+      "table": "patients",
+      "verifiedColumns": [
+        "id",
+        "created_at",
+        "age"
+      ],
+      "read": {
+        "status": 200,
+        "success": true,
+        "rowCount": 0,
+        "error": null
+      },
+      "write": {
+        "status": 401,
+        "success": false,
+        "error": "new row violates row-level security policy for table \"patients\"",
+        "reason": "Blocked by Row-Level Security (RLS) policy (anon client unauthenticated)",
+        "code": "42501"
+      }
+    },
+    "scans": {
+      "table": "scans",
+      "verifiedColumns": [
+        "id",
+        "patient_id",
+        "image_url",
+        "confidence_score",
+        "doctor_notes"
+      ],
+      "read": {
+        "status": 200,
+        "success": true,
+        "rowCount": 0,
+        "error": null
+      },
+      "write": {
+        "status": 401,
+        "success": false,
+        "error": "new row violates row-level security policy for table \"scans\"",
+        "reason": "Blocked by Row-Level Security (RLS) policy (anon client unauthenticated)",
+        "code": "42501"
+      }
+    },
+    "appointments": {
+      "table": "appointments",
+      "verifiedColumns": [
+        "id",
+        "patient_id",
+        "doctor_id",
+        "status",
+        "notes",
+        "scheduled_at",
+        "created_at"
+      ],
+      "read": {
+        "status": 200,
+        "success": true,
+        "rowCount": 0,
+        "error": null
+      },
+      "write": {
+        "status": 401,
+        "success": false,
+        "error": "new row violates row-level security policy for table \"appointments\"",
+        "reason": "Blocked by Row-Level Security (RLS) policy (anon client unauthenticated)",
+        "code": "42501"
+      }
+    },
+    "messages": {
+      "table": "messages",
+      "verifiedColumns": [
+        "id",
+        "sender_id",
+        "receiver_id",
+        "message_text",
+        "sent_at"
+      ],
+      "read": {
+        "status": 200,
+        "success": true,
+        "rowCount": 0,
+        "error": null
+      },
+      "write": {
+        "status": 401,
+        "success": false,
+        "error": "new row violates row-level security policy for table \"messages\"",
+        "reason": "Blocked by Row-Level Security (RLS) policy (anon client unauthenticated)",
+        "code": "42501"
+      }
+    }
+  },
+  "storage": {
+    "scan-images": {
+      "bucket": "scan-images",
+      "bucketExists": false,
+      "list": {
+        "success": true,
+        "error": null
+      },
+      "upload": {
+        "success": false,
+        "error": "new row violates row-level security policy"
+      },
+      "publicUrl": null
+    }
+  }
+}
