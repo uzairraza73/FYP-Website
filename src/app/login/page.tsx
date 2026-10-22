@@ -9,17 +9,21 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/client";
 
 function DoctorLogin({ 
-  handleSubmit, email, setEmail, password, setPassword, name, setName 
+  handleSubmit, email, setEmail, password, setPassword, name, setName, authError, loading
 }: any) {
   const [showPassword, setShowPassword] = useState(false);
-  const handleGoogleLogin = () => {
-    window.open(
-      "https://accounts.google.com/o/oauth2/v2/auth?client_id=DEMO&redirect_uri=" + encodeURIComponent(window.location.origin + "/login?role=doctor") + "&response_type=code&scope=email%20profile",
-      "_blank",
-      "width=500,height=600"
-    );
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?role=doctor`,
+        queryParams: { access_type: "offline", prompt: "consent" },
+      },
+    });
   };
   return (
     <div className="min-h-screen flex items-center justify-center font-plus-jakarta bg-[#FAF6F3] p-4 sm:p-8">
@@ -166,9 +170,12 @@ function DoctorLogin({
                 </Link>
               </div>
 
-              <button type="submit" className="w-full bg-[#5C4033] hover:bg-[#4A3225] text-white rounded-xl py-3 text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 group mt-2">
-                Log In <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              <button type="submit" disabled={loading} className="w-full bg-[#5C4033] hover:bg-[#4A3225] disabled:opacity-60 text-white rounded-xl py-3 text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 group mt-2">
+                {loading ? "Logging in…" : <>Log In <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" /></>}
               </button>
+              {authError && (
+                <p className="text-xs text-red-600 font-semibold text-center pt-1">{authError}</p>
+              )}
             </form>
 
             <div className="relative flex items-center justify-center py-2">
@@ -204,15 +211,18 @@ function DoctorLogin({
 }
 
 function PatientLogin({ 
-  handleSubmit, email, setEmail, password, setPassword, name, setName 
+  handleSubmit, email, setEmail, password, setPassword, name, setName, authError, loading
 }: any) {
   const [showPassword, setShowPassword] = useState(false);
-  const handleGoogleLogin = () => {
-    window.open(
-      "https://accounts.google.com/o/oauth2/v2/auth?client_id=DEMO&redirect_uri=" + encodeURIComponent(window.location.origin + "/login?role=patient") + "&response_type=code&scope=email%20profile",
-      "_blank",
-      "width=500,height=600"
-    );
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?role=patient`,
+        queryParams: { access_type: "offline", prompt: "consent" },
+      },
+    });
   };
   return (
     <div className="min-h-screen flex items-center justify-center font-plus-jakarta bg-[#FAF6F3] p-4 sm:p-8">
@@ -332,9 +342,12 @@ function PatientLogin({
                 </Link>
               </div>
 
-              <button type="submit" className="w-full bg-[#5C4033] hover:bg-[#4A3225] text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] hover:shadow-[0_12px_25px_rgba(92,64,51,0.35)] transition-all flex items-center justify-center gap-2 group mt-4">
-                Log In <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              <button type="submit" disabled={loading} className="w-full bg-[#5C4033] hover:bg-[#4A3225] disabled:opacity-60 text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] hover:shadow-[0_12px_25px_rgba(92,64,51,0.35)] transition-all flex items-center justify-center gap-2 group mt-4">
+                {loading ? "Logging in…" : <>Log In <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" /></>}
               </button>
+              {authError && (
+                <p className="text-xs text-red-600 font-semibold text-center pt-1">{authError}</p>
+              )}
             </form>
 
             <div className="relative flex items-center justify-center py-4">
@@ -377,24 +390,34 @@ function LoginContent() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulation of authentication
-    setLogin({
-      name: role === "doctor" ? name || "Dr. Saeed" : name || "Uzair Ahmad",
-      role: role as "patient" | "doctor",
-      email: email
-    });
-    
-    if (role === "doctor") {
-      router.push("/doctor");
-    } else {
-      router.push("/dashboard");
+    setAuthError(null);
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setAuthError(error.message);
+        setLoading(false);
+        return;
+      }
+      setLogin({
+        name: data.user?.user_metadata?.full_name || name || (role === "doctor" ? "Dr. Saeed" : "Patient"),
+        role: role as "patient" | "doctor",
+        email: data.user?.email || email,
+      });
+      router.push(role === "doctor" ? "/doctor" : "/dashboard");
+    } catch {
+      setAuthError("Login failed. Please try again.");
+      setLoading(false);
     }
   };
 
-  const props = { handleSubmit, email, setEmail, password, setPassword, name, setName };
+  const props = { handleSubmit, email, setEmail, password, setPassword, name, setName, authError, loading };
 
   if (role === "doctor") {
     return <DoctorLogin {...props} />;

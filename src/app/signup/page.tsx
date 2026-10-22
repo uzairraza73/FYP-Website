@@ -11,6 +11,7 @@ import { useState, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/client";
 
 // ─── Shared input styles ──────────────────────────────────────────────────────
 const inputCls =
@@ -28,7 +29,7 @@ function FieldIcon({ children }: { children: React.ReactNode }) {
 }
 
 // ─── DOCTOR SIGNUP ────────────────────────────────────────────────────────────
-function DoctorSignup({ handleSubmit }: { handleSubmit: (name: string, email: string) => void }) {
+function DoctorSignup({ handleSubmit, authError, loading }: { handleSubmit: (name: string, email: string, password: string) => void; authError: string | null; loading: boolean }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,12 +50,15 @@ function DoctorSignup({ handleSubmit }: { handleSubmit: (name: string, email: st
   const cnicBackRef = useRef<HTMLInputElement>(null);
   const degreeFileRef = useRef<HTMLInputElement>(null);
 
-  const handleGoogleSignup = () => {
-    window.open(
-      "https://accounts.google.com/o/oauth2/v2/auth?client_id=DEMO&redirect_uri=" + encodeURIComponent(window.location.origin + "/signup?role=doctor") + "&response_type=code&scope=email%20profile",
-      "_blank",
-      "width=500,height=600"
-    );
+  const handleGoogleSignup = async () => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?role=doctor`,
+        queryParams: { access_type: "offline", prompt: "consent" },
+      },
+    });
   };
 
   return (
@@ -112,7 +116,7 @@ function DoctorSignup({ handleSubmit }: { handleSubmit: (name: string, email: st
               </div>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(name, email); }} className="space-y-4">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(name, email, password); }} className="space-y-4">
               {/* Row 1: Name & Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="relative group">
@@ -215,9 +219,12 @@ function DoctorSignup({ handleSubmit }: { handleSubmit: (name: string, email: st
               </div>
 
               {/* Submit */}
-              <button type="submit" className="w-full bg-[#5C4033] hover:bg-[#4A3225] text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] transition-all flex items-center justify-center gap-2 group mt-1">
-                Create Doctor Account <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              <button type="submit" disabled={loading} className="w-full bg-[#5C4033] hover:bg-[#4A3225] disabled:opacity-60 text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] transition-all flex items-center justify-center gap-2 group mt-1">
+                {loading ? "Creating Account…" : <>Create Doctor Account <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" /></>}
               </button>
+              {authError && (
+                <p className="text-xs text-red-600 font-semibold text-center pt-1">{authError}</p>
+              )}
 
               <div className="relative flex items-center justify-center py-1">
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#D7CCC8]" /></div>
@@ -247,7 +254,7 @@ function DoctorSignup({ handleSubmit }: { handleSubmit: (name: string, email: st
 }
 
 // ─── PATIENT SIGNUP ───────────────────────────────────────────────────────────
-function PatientSignup({ handleSubmit }: { handleSubmit: (name: string, email: string) => void }) {
+function PatientSignup({ handleSubmit, authError, loading }: { handleSubmit: (name: string, email: string, password: string) => void; authError: string | null; loading: boolean }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -256,12 +263,15 @@ function PatientSignup({ handleSubmit }: { handleSubmit: (name: string, email: s
   const [bloodGroup, setBloodGroup] = useState("");
   const [disability, setDisability] = useState("");
 
-  const handleGoogleSignup = () => {
-    window.open(
-      "https://accounts.google.com/o/oauth2/v2/auth?client_id=DEMO&redirect_uri=" + encodeURIComponent(window.location.origin + "/signup?role=patient") + "&response_type=code&scope=email%20profile",
-      "_blank",
-      "width=500,height=600"
-    );
+  const handleGoogleSignup = async () => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?role=patient`,
+        queryParams: { access_type: "offline", prompt: "consent" },
+      },
+    });
   };
 
   return (
@@ -317,7 +327,7 @@ function PatientSignup({ handleSubmit }: { handleSubmit: (name: string, email: s
               </div>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(name, email); }} className="space-y-3.5">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(name, email, password); }} className="space-y-3.5">
               {/* Name */}
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D6E63] group-focus-within:text-[#5C4033] transition-colors pointer-events-none"><User size={15} /></div>
@@ -370,9 +380,12 @@ function PatientSignup({ handleSubmit }: { handleSubmit: (name: string, email: s
               </div>
 
               {/* Submit */}
-              <button type="submit" className="w-full bg-[#5C4033] hover:bg-[#4A3225] text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] transition-all flex items-center justify-center gap-2 group mt-1">
-                Create Account <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              <button type="submit" disabled={loading} className="w-full bg-[#5C4033] hover:bg-[#4A3225] disabled:opacity-60 text-white rounded-full py-3.5 text-xs font-bold shadow-[0_8px_20px_rgba(92,64,51,0.25)] transition-all flex items-center justify-center gap-2 group mt-1">
+                {loading ? "Creating Account…" : <>Create Account <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" /></>}
               </button>
+              {authError && (
+                <p className="text-xs text-red-600 font-semibold text-center pt-1">{authError}</p>
+              )}
 
               <div className="relative flex items-center justify-center py-1">
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#D7CCC8]" /></div>
@@ -407,18 +420,41 @@ function SignupContent() {
   const searchParams = useSearchParams();
   const { login: setLogin } = useAuthStore();
   const role = searchParams.get("role") || "patient";
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (name: string, email: string) => {
-    setLogin({
-      name: name || (role === "doctor" ? "Dr. New Doctor" : "New Patient"),
-      role: role as "patient" | "doctor",
-      email: email || ""
-    });
-    router.push(role === "doctor" ? "/doctor" : "/dashboard");
+  const handleSubmit = async (name: string, email: string, password: string) => {
+    setAuthError(null);
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name, role },
+        },
+      });
+      if (error) {
+        setAuthError(error.message);
+        setLoading(false);
+        return;
+      }
+      setLogin({
+        name: name || (role === "doctor" ? "Dr. New Doctor" : "New Patient"),
+        role: role as "patient" | "doctor",
+        email: data.user?.email || email,
+      });
+      router.push(role === "doctor" ? "/doctor" : "/dashboard");
+    } catch {
+      setAuthError("Signup failed. Please try again.");
+      setLoading(false);
+    }
   };
 
-  if (role === "doctor") return <DoctorSignup handleSubmit={handleSubmit} />;
-  return <PatientSignup handleSubmit={handleSubmit} />;
+  const sharedProps = { handleSubmit, authError, loading };
+  if (role === "doctor") return <DoctorSignup {...sharedProps} />;
+  return <PatientSignup {...sharedProps} />;
 }
 
 export default function SignupPage() {
